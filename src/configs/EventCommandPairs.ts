@@ -1,8 +1,9 @@
 import { lego } from '@armathai/lego';
 import { MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
-import { AdModelEvents, GameModelEvents } from '../events/ModelEvents';
+import { AdModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
+    onBoardStateUpdateCommand,
     onGameStateUpdateCommand,
     onMainViewReadyCommand,
     onSoundToggleCommand,
@@ -34,6 +35,10 @@ const eventCommandPairs = Object.freeze([
     {
         event: GameModelEvents.StateUpdate,
         command: onGameStateUpdateCommand,
+    },
+    {
+        event: BoardModelEvents.StateUpdate,
+        command: onBoardStateUpdateCommand,
     },
     {
         event: MainGameEvents.Resize,

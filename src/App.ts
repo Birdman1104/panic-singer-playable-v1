@@ -81,8 +81,6 @@ class App extends Application {
         this.stage.start();
         lego.command.execute(mapCommands);
         lego.event.emit(MainGameEvents.MainViewReady);
-
-        this.ticker.add(() => this.stage.update());
     }
 
     private resizeCanvas(width: number, height: number): void {

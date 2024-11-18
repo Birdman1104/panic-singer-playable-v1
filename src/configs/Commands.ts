@@ -1,5 +1,6 @@
 import { lego } from '@armathai/lego';
 import { AdStatus } from '../models/AdModel';
+import { BoardState } from '../models/BoardModel';
 import { GameState } from '../models/GameModel';
 import Head from '../models/HeadModel';
 import { HintState } from '../models/HintModel';
@@ -14,7 +15,10 @@ export const onMainViewReadyCommand = (): void => {
         .execute(initAdModelCommand)
 
         .payload(AdStatus.Game)
-        .execute(setAdStatusCommand);
+        .execute(setAdStatusCommand)
+
+        .payload(BoardState.ChooseCategory)
+        .execute(setBoardStateCommand);
 };
 
 const initializeGameModelCommand = (): void => Head.initializeGameModel();
@@ -40,12 +44,12 @@ const initializeModelsCommand = (): void => {
         .execute(initializeSoundModelCommand)
 
         .guard(hintParamGuard)
-        .execute(initializeHintModelCommand)
+        .execute(initializeHintModelCommand);
 
-        .execute(startIdleTimerCommand)
+    // .execute(startIdleTimerCommand);
 
-        .guard(hintParamGuard)
-        .execute(startHintVisibilityTimerCommand);
+    // .guard(hintParamGuard)
+    // .execute(startHintVisibilityTimerCommand);
 };
 
 const hideHintCommand = (): void => {
@@ -107,6 +111,7 @@ export const onAdStatusUpdateCommand = (status: AdStatus): void => {
 };
 
 const setGameStateCommand = (state: GameState): void => Head.gameModel?.setState(state);
+const setBoardStateCommand = (state: BoardState): void => Head.gameModel?.board?.setState(state);
 const showCtaCommand = (): void => Head.ad?.cta?.show();
 
 const turnOffTutorialModeCommand = (): void => Head.gameModel?.turnOffTutorialMode();
@@ -115,6 +120,17 @@ export const onGameStateUpdateCommand = (state: GameState): void => {
     switch (state) {
         case GameState.Idle:
             //
+            break;
+
+        default:
+            break;
+    }
+};
+
+export const onBoardStateUpdateCommand = (state: BoardState): void => {
+    switch (state) {
+        case BoardState.ChooseCategory:
+            Head.gameModel?.board?.initializeCategories();
             break;
 
         default:

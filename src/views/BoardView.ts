@@ -1,13 +1,17 @@
 import { lego } from '@armathai/lego';
 import { Container } from 'pixi.js';
-import { GameModelEvents } from '../events/ModelEvents';
+import { BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
+import { CategoryModel } from '../models/CategoryModel';
 import { GameState } from '../models/GameModel';
+import { CategoriesWrapper } from './CategoriesWrapper';
 
 export class BoardView extends Container {
     constructor() {
         super();
 
-        lego.event.on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this);
+        lego.event
+            .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this)
+            .on(BoardModelEvents.CategoriesUpdate, this.onCategoriesUpdate, this);
 
         this.build();
     }
@@ -26,5 +30,10 @@ export class BoardView extends Container {
 
     private onGameStateUpdate(state: GameState): void {
         //
+    }
+
+    private onCategoriesUpdate(categories: CategoryModel[]): void {
+        this.addChild(new CategoriesWrapper(categories));
+        this.emit('rebuild');
     }
 }

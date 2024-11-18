@@ -6,16 +6,9 @@ export const AdModelEvents = {
 };
 
 export const BoardModelEvents = {
-    ActiveCardUpdate: 'BoardModelActiveCardUpdate',
-    CardsUpdate: 'BoardModelCardsUpdate',
-    TypedTextUpdate: 'BoardModelTypedTextUpdate',
-    IsGameOverUpdate: 'BoardModelIsGameOverUpdate',
-};
-
-export const CardModelEvents = {
-    AnswersRemainingUpdate: 'CardModelAnswersRemainingUpdate',
-    CompletedUpdate: 'CardModelCompletedUpdate',
-    InteractivityUpdate: 'CardModelInteractivityUpdate',
+    CategoriesUpdate: 'BoardModelCategoriesUpdate',
+    TimeUpdate: 'BoardModelTimeUpdate',
+    StateUpdate: 'BoardModelStateUpdate',
 };
 
 export const CtaModelEvents = { VisibleUpdate: 'CtaModelVisibleUpdate' };
