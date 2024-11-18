@@ -1,20 +1,25 @@
 import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
+import anime from 'animejs';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
-import { GameModelEvents, HintModelEvents } from '../events/ModelEvents';
-import { BoardModel } from '../models/BoardModel';
+import { BoardModelEvents, GameModelEvents, HintModelEvents } from '../events/ModelEvents';
+import { BoardModel, BoardState } from '../models/BoardModel';
+import { CategoryModel } from '../models/CategoryModel';
 import { HintState } from '../models/HintModel';
-import { BoardView } from './BoardView';
-
+import { tweenToCell } from '../utils';
+import { ChooseCategory } from './ChooseCategoryView';
 export class GameView extends PixiGrid {
-    private board: BoardView;
+    private chooseCategory: ChooseCategory;
 
     constructor() {
         super();
 
         lego.event
             .on(GameModelEvents.BoardUpdate, this.onBoardUpdate, this)
-            .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this);
+            .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this)
+            .on(BoardModelEvents.CategoriesUpdate, this.onCategoriesUpdate, this)
+            .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
+
         this.build();
     }
 
@@ -42,13 +47,45 @@ export class GameView extends PixiGrid {
         board ? this.buildBoard() : this.destroyBoard();
     }
 
+    private onCategoriesUpdate(categories: CategoryModel[]): void {
+        this.chooseCategory.onCategoriesUpdate(categories);
+    }
+
     private buildBoard() {
-        this.board = new BoardView();
-        this.board.on('rebuild', this.rebuild, this);
-        this.setChild('board', this.board);
+        this.chooseCategory = new ChooseCategory();
+        this.chooseCategory.on('rebuild', this.rebuild, this);
+        this.setChild('choose_category', this.chooseCategory);
+    }
+
+    private onBoardStateUpdate(state: BoardState): void {
+        console.warn(state);
+
+        switch (state) {
+            case BoardState.ChooseCategory:
+                break;
+            case BoardState.ChooseTime:
+                this.switchToChooseTime();
+
+                break;
+            case BoardState.Countdown:
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private switchToChooseTime(): void {
+        tweenToCell(this, this.chooseCategory, 'choose_category_left');
+        anime({
+            targets: this.chooseCategory,
+            alpha: 0,
+            duration: 300,
+            easing: 'easeInOutSine',
+        });
     }
 
     private destroyBoard(): void {
-        this.board.destroy();
+        this.chooseCategory.destroy();
     }
 }

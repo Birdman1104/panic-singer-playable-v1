@@ -1,5 +1,5 @@
 import { lego } from '@armathai/lego';
-import { MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
+import { BoardEvents, MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
 import { AdModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
@@ -10,6 +10,7 @@ import {
     resizeCommand,
     takeToStoreCommand,
 } from './Commands';
+import { onCategoryClickCommand } from './GameCommands';
 
 export const mapCommands = () => {
     eventCommandPairs.forEach(({ event, command }) => {
@@ -51,5 +52,9 @@ const eventCommandPairs = Object.freeze([
     {
         event: SoundEvents.SoundToggle,
         command: onSoundToggleCommand,
+    },
+    {
+        event: BoardEvents.CategoryClick,
+        command: onCategoryClickCommand,
     },
 ]);

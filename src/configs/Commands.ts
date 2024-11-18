@@ -111,7 +111,7 @@ export const onAdStatusUpdateCommand = (status: AdStatus): void => {
 };
 
 const setGameStateCommand = (state: GameState): void => Head.gameModel?.setState(state);
-const setBoardStateCommand = (state: BoardState): void => Head.gameModel?.board?.setState(state);
+export const setBoardStateCommand = (state: BoardState): void => Head.gameModel?.board?.setState(state);
 const showCtaCommand = (): void => Head.ad?.cta?.show();
 
 const turnOffTutorialModeCommand = (): void => Head.gameModel?.turnOffTutorialMode();
