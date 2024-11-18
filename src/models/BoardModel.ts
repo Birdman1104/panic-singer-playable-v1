@@ -4,7 +4,7 @@ import { ObservableModel } from './ObservableModel';
 export enum BoardState {
     Undefined = 'Undefined',
     ChooseCategory = 'ChooseCategory',
-    ChooseTime = 'ChooseTime',
+    ChooseSettings = 'ChooseSettings',
     Countdown = 'Countdown',
     PlaySong = 'PlaySong',
     ShowAnswer = 'ShowAnswer',

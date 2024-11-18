@@ -6,5 +6,5 @@ import { setBoardStateCommand } from './Commands';
 
 export const onCategoryClickCommand = (categoryName: CategoryName): void => {
     Head.gameModel?.board?.setChosenCategory(categoryName);
-    lego.command.payload(BoardState.ChooseTime).execute(setBoardStateCommand);
+    lego.command.payload(BoardState.ChooseSettings).execute(setBoardStateCommand);
 };

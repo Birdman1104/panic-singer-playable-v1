@@ -4,10 +4,11 @@ import anime from 'animejs';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
 import { BoardModelEvents, GameModelEvents, HintModelEvents } from '../events/ModelEvents';
 import { BoardModel, BoardState } from '../models/BoardModel';
-import { CategoryModel } from '../models/CategoryModel';
+import { CategoryModel, CategoryName } from '../models/CategoryModel';
 import { HintState } from '../models/HintModel';
 import { tweenToCell } from '../utils';
 import { ChooseCategory } from './ChooseCategoryView';
+import { ChooseSettings } from './ChooseSettings';
 export class GameView extends PixiGrid {
     private chooseCategory: ChooseCategory;
 
@@ -17,7 +18,7 @@ export class GameView extends PixiGrid {
         lego.event
             .on(GameModelEvents.BoardUpdate, this.onBoardUpdate, this)
             .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this)
-            .on(BoardModelEvents.CategoriesUpdate, this.onCategoriesUpdate, this)
+            // .on(BoardModelEvents.CategoriesUpdate, this.onCategoriesUpdate, this)
             .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
 
         this.build();
@@ -36,7 +37,12 @@ export class GameView extends PixiGrid {
     }
 
     private build(): void {
-        //
+        this.buildSettings();
+    }
+
+    private buildSettings(): void {
+        const set = new ChooseSettings(CategoryName.OldButGold);
+        this.setChild('choose_settings', set);
     }
 
     private onHintStateUpdate(state: HintState): void {
@@ -63,9 +69,8 @@ export class GameView extends PixiGrid {
         switch (state) {
             case BoardState.ChooseCategory:
                 break;
-            case BoardState.ChooseTime:
+            case BoardState.ChooseSettings:
                 this.switchToChooseTime();
-
                 break;
             case BoardState.Countdown:
                 break;

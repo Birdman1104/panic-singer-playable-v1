@@ -19,6 +19,10 @@ const getGameViewGridLandscapeConfig = () => {
                 name: 'choose_category_left',
                 bounds: { x: -0.5, y: 0, width: 1, height: 1 },
             },
+            {
+                name: 'choose_settings',
+                bounds: { x: 0, y: 0, width: 1, height: 1 },
+            },
         ],
     };
 };
@@ -38,6 +42,10 @@ const getGameViewGridPortraitConfig = () => {
             {
                 name: 'choose_category_left',
                 bounds: { x: -0.5, y: 0, width: 0.9, height: 1 },
+            },
+            {
+                name: 'choose_settings',
+                bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
         ],
     };
