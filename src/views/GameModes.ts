@@ -2,9 +2,9 @@ import { Container, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { makeSprite } from '../utils';
 
-export class GameMode extends Container {
+export class GameModes extends Container {
     private bkgType: Sprite;
-    private singleplayer: Sprite;
+    private singlePlayer: Sprite;
     private multiplayer: Sprite;
     private lockType: Sprite;
     private greenBkgSinglePlayer: Sprite;
@@ -45,21 +45,21 @@ export class GameMode extends Container {
     private buildBkgHard(): void {
         this.bkgHard = makeSprite({ texture: Images['game/bkg'] });
         this.bkgHard.anchor.set(0.5);
-        this.bkgHard.position.set(0, 100);
+        this.bkgHard.position.set(0, 70);
         this.addChild(this.bkgHard);
     }
 
     private buildGreenBkgType(): void {
         this.greenBkgSinglePlayer = makeSprite({ texture: Images['game/green_bkg'] });
         this.greenBkgSinglePlayer.anchor.set(0.5);
-        this.greenBkgSinglePlayer.position.set(129, this.bkgType.y - 1);
+        this.greenBkgSinglePlayer.position.set(130, this.bkgType.y);
         this.addChild(this.greenBkgSinglePlayer);
     }
 
     private buildGreenBkgHard(): void {
         this.greenBkgHard = makeSprite({ texture: Images['game/green_bkg'] });
         this.greenBkgHard.anchor.set(0.5);
-        this.greenBkgHard.position.set(-131, this.bkgHard.y - 1);
+        this.greenBkgHard.position.set(-132, this.bkgHard.y);
         this.addChild(this.greenBkgHard);
     }
 
@@ -88,11 +88,11 @@ export class GameMode extends Container {
     }
 
     private buildSinglePlayer(): void {
-        this.singleplayer = makeSprite({ texture: Images['game/singleplayer'] });
-        this.singleplayer.anchor.set(0.5);
-        this.singleplayer.scale.set((this.greenBkgSinglePlayer.height - 10) / this.singleplayer.height);
-        this.singleplayer.position.set(this.greenBkgSinglePlayer.x, this.bkgType.y);
-        this.addChild(this.singleplayer);
+        this.singlePlayer = makeSprite({ texture: Images['game/singleplayer'] });
+        this.singlePlayer.anchor.set(0.5);
+        this.singlePlayer.scale.set((this.greenBkgSinglePlayer.height - 10) / this.singlePlayer.height);
+        this.singlePlayer.position.set(this.greenBkgSinglePlayer.x, this.bkgType.y);
+        this.addChild(this.singlePlayer);
     }
 
     private buildMultiplayer(): void {

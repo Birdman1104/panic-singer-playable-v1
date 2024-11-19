@@ -13,6 +13,12 @@ export const BoardEvents = {
     CategoryClick: 'BoardEventsCategoryClick',
 };
 
+export const ChooseSettingsEvents = {
+    PlusClick: 'ChooseSettingsEventsPlusClick',
+    MinusClick: 'ChooseSettingsEventsMinusClick',
+    StartClick: 'ChooseSettingsEventsStartClick',
+};
+
 export const TakeMe = {
     ToStore: 'TakeMeToStore',
 };

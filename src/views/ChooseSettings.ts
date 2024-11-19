@@ -1,13 +1,16 @@
+import { lego } from '@armathai/lego';
 import { Container, Rectangle, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { DEFAULT_FONT } from '../configs/GameConfig';
+import { ChooseSettingsEvents } from '../events/MainEvents';
 import { CategoryName } from '../models/CategoryModel';
 import { makeSprite } from '../utils';
-import { GameMode } from './GameMode';
+import { CategorySettings } from './CategorySettings';
 
 export class ChooseSettings extends Container {
     private cover: Sprite;
-    private gameMode: GameMode;
+    private startButton: Sprite;
+    private categorySettings: CategorySettings;
     private title: Text;
 
     constructor(private category: CategoryName) {
@@ -26,6 +29,7 @@ export class ChooseSettings extends Container {
         this.buildCover();
         this.buildTitle();
         this.buildMode();
+        this.buildStartButton();
     }
 
     private buildCover(): void {
@@ -48,9 +52,28 @@ export class ChooseSettings extends Container {
     }
 
     private buildMode(): void {
-        this.gameMode = new GameMode();
-        this.gameMode.position.set(300, 600);
-        this.addChild(this.gameMode);
+        this.categorySettings = new CategorySettings();
+        this.categorySettings.position.set(300, 560);
+        this.addChild(this.categorySettings);
+    }
+
+    private buildStartButton(): void {
+        this.startButton = makeSprite({ texture: Images['game/button'] });
+        const txt = new Text('START', {
+            fill: 0xffffff,
+            fontFamily: DEFAULT_FONT,
+            fontSize: 40,
+            fontWeight: 900,
+        });
+        txt.anchor.set(0.5);
+        txt.position.set(0, 0);
+        this.startButton.addChild(txt);
+        this.startButton.anchor.set(0.5);
+        this.startButton.position.set(300, 830);
+
+        this.startButton.interactive = true;
+        this.startButton.on('pointerdown', () => lego.event.emit(ChooseSettingsEvents.StartClick));
+        this.addChild(this.startButton);
     }
 }
 
