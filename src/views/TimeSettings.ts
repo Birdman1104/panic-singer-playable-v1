@@ -2,6 +2,7 @@ import { lego } from '@armathai/lego';
 import { Container, Graphics, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { ChooseSettingsEvents } from '../events/MainEvents';
+import { BoardModelEvents } from '../events/ModelEvents';
 import { makeSprite } from '../utils';
 
 export class TimeSettings extends Container {
@@ -14,6 +15,7 @@ export class TimeSettings extends Container {
     constructor() {
         super();
 
+        lego.event.on(BoardModelEvents.TimeUpdate, this.onTimeUpdate, this);
         this.build();
     }
 
@@ -34,24 +36,26 @@ export class TimeSettings extends Container {
 
     private buildPlusHitArea(): void {
         this.plusHitArea = new Graphics();
-        this.plusHitArea.beginFill(0x000000, 0);
+        this.plusHitArea.beginFill(0x000000, 1);
         const { x, y, width, height } = this.plus;
         this.plusHitArea.drawRect(x - width / 2, y - height / 2, width, height);
         this.plusHitArea.endFill();
         this.plusHitArea.interactive = true;
         this.plusHitArea.on('pointerdown', () => lego.event.emit(ChooseSettingsEvents.PlusClick));
+        this.plusHitArea.alpha = 0;
         this.addChild(this.plusHitArea);
     }
 
     private buildMinusHitArea(): void {
         this.minusHitArea = new Graphics();
-        this.minusHitArea.beginFill(0x000000, 0);
+        this.minusHitArea.beginFill(0x000000, 1);
         const { x, y, width } = this.minus;
         const { height } = this.plus;
         this.minusHitArea.drawRect(x - width / 2, y - height / 2, width, height);
         this.minusHitArea.endFill();
         this.minusHitArea.interactive = true;
         this.minusHitArea.on('pointerdown', () => lego.event.emit(ChooseSettingsEvents.MinusClick));
+        this.minusHitArea.alpha = 0;
         this.addChild(this.minusHitArea);
     }
 
@@ -70,6 +74,10 @@ export class TimeSettings extends Container {
         this.time.anchor.set(0.5);
         this.time.position.set(0, 0);
         this.addChild(this.time);
+    }
+
+    private onTimeUpdate(time: number): void {
+        this.time.text = convertSecondsToTime(time);
     }
 }
 

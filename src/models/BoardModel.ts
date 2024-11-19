@@ -13,7 +13,7 @@ export enum BoardState {
 
 export class BoardModel extends ObservableModel {
     private _categories: CategoryModel[] = [];
-    private _time = 0;
+    private _time = 60;
     private _state = BoardState.Undefined;
     private _chosenCategory: CategoryModel | null = null;
 
@@ -74,5 +74,13 @@ export class BoardModel extends ObservableModel {
             categories.push(new CategoryModel(category as CategoryName));
         }
         this.categories = categories;
+    }
+
+    public increaseTime(): void {
+        this._time = Math.min(this._time + 30, 120);
+    }
+
+    public decreaseTime(): void {
+        this._time = Math.max(this._time - 30, 30);
     }
 }

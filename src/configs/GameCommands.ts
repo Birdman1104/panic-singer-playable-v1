@@ -8,3 +8,6 @@ export const onCategoryClickCommand = (categoryName: CategoryName): void => {
     Head.gameModel?.board?.setChosenCategory(categoryName);
     lego.command.payload(BoardState.ChooseSettings).execute(setBoardStateCommand);
 };
+
+export const onMinusClickCommand = (): void => Head.gameModel?.board?.decreaseTime();
+export const onPlusClickCommand = (): void => Head.gameModel?.board?.increaseTime();
