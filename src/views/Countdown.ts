@@ -35,7 +35,6 @@ export class Countdown extends Container {
                 complete: () => {
                     delayRunnable(0.5, () => {
                         if (i === 0) {
-                            console.warn(this);
                             this.emit('countdownComplete');
                         } else {
                             animate(text, i - 1);

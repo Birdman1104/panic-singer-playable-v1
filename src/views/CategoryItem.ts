@@ -27,7 +27,7 @@ export class CategoryItem extends Container {
     }
 
     private build() {
-        this.cover = makeSprite({ texture: Images[`game/${CategoryName[this._name]}`] });
+        this.cover = makeSprite({ texture: Images[`game/${this._name}`] });
         this.cover.scale.set(CATEGORY_WIDTH / this.cover.width);
         this.cover.interactive = true;
         this.cover.on('pointerdown', () => this.emit('click', this._name));

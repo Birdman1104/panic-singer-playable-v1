@@ -9,6 +9,7 @@ export const BoardModelEvents = {
     CategoriesUpdate: 'BoardModelCategoriesUpdate',
     TimeUpdate: 'BoardModelTimeUpdate',
     StateUpdate: 'BoardModelStateUpdate',
+    ChosenCategoryUpdate: 'BoardModelChosenCategoryUpdate',
 };
 
 export const CtaModelEvents = { VisibleUpdate: 'CtaModelVisibleUpdate' };

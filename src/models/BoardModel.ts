@@ -71,7 +71,7 @@ export class BoardModel extends ObservableModel {
     public initializeCategories(): void {
         const categories: CategoryModel[] = [];
         for (const category in CategoryName) {
-            categories.push(new CategoryModel(category as CategoryName));
+            categories.push(new CategoryModel(CategoryName[category]));
         }
         this.categories = categories;
     }

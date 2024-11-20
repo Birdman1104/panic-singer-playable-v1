@@ -5,7 +5,7 @@ import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
 import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, GameModelEvents, HintModelEvents } from '../events/ModelEvents';
 import { BoardModel, BoardState } from '../models/BoardModel';
-import { CategoryModel, CategoryName } from '../models/CategoryModel';
+import { CategoryModel } from '../models/CategoryModel';
 import { HintState } from '../models/HintModel';
 import { tweenToCell } from '../utils';
 import { ChooseCategory } from './ChooseCategoryView';
@@ -15,6 +15,7 @@ export class GameView extends PixiGrid {
     private chooseCategory: ChooseCategory;
     private chooseSettings: ChooseSettings;
     private countdown: Countdown;
+    private chosenCategory: CategoryModel;
 
     constructor() {
         super();
@@ -22,7 +23,8 @@ export class GameView extends PixiGrid {
         lego.event
             .on(GameModelEvents.BoardUpdate, this.onBoardUpdate, this)
             .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this)
-            // .on(BoardModelEvents.CategoriesUpdate, this.onCategoriesUpdate, this)
+            .on(BoardModelEvents.ChosenCategoryUpdate, this.onChosenCategoryUpdate, this)
+            .on(BoardModelEvents.CategoriesUpdate, this.onCategoriesUpdate, this)
             .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
 
         this.build();
@@ -40,17 +42,18 @@ export class GameView extends PixiGrid {
         super.rebuild(this.getGridConfig());
     }
 
-    private build(): void {
-        this.buildSettings();
-    }
+    private build(): void {}
 
-    private buildSettings(): void {
-        this.chooseSettings = new ChooseSettings(CategoryName.OldButGold);
+    private onChosenCategoryUpdate(category: CategoryModel): void {
+        this.chosenCategory = category;
+
+        this.chooseSettings = new ChooseSettings(this.chosenCategory.name);
         this.chooseSettings.on('hideComplete', () => {
             this.chooseSettings.destroy();
             this.addCountdown();
         });
-        this.setChild('choose_settings', this.chooseSettings);
+        this.setChild('choose_settings_right', this.chooseSettings);
+        tweenToCell(this, this.chooseSettings, 'choose_settings');
     }
 
     private onHintStateUpdate(state: HintState): void {

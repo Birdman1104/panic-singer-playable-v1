@@ -38,3 +38,8 @@ type PointLike = {
     x: number;
     y: number;
 };
+
+type SongInfo = {
+    singer: string;
+    song: string;
+};

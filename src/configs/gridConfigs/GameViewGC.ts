@@ -24,6 +24,10 @@ const getGameViewGridLandscapeConfig = () => {
                 bounds: { x: -0.5, y: 0, width: 1, height: 1 },
             },
             {
+                name: 'choose_settings_right',
+                bounds: { x: 1, y: 0, width: 1, height: 1 },
+            },
+            {
                 name: 'choose_settings',
                 bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
@@ -54,6 +58,10 @@ const getGameViewGridPortraitConfig = () => {
             {
                 name: 'choose_settings',
                 bounds: { x: 0, y: 0, width: 1, height: 1 },
+            },
+            {
+                name: 'choose_settings_right',
+                bounds: { x: 1, y: 0, width: 1, height: 1 },
             },
         ],
     };
