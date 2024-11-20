@@ -11,6 +11,7 @@ export const MainGameEvents = {
 
 export const BoardEvents = {
     CategoryClick: 'BoardEventsCategoryClick',
+    CountdownComplete: 'BoardEventsCountdownComplete',
 };
 
 export const ChooseSettingsEvents = {

@@ -2,6 +2,7 @@ import { lego } from '@armathai/lego';
 import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
+import { BoardEvents } from '../events/MainEvents';
 import { BoardModelEvents, GameModelEvents, HintModelEvents } from '../events/ModelEvents';
 import { BoardModel, BoardState } from '../models/BoardModel';
 import { CategoryModel, CategoryName } from '../models/CategoryModel';
@@ -9,8 +10,11 @@ import { HintState } from '../models/HintModel';
 import { tweenToCell } from '../utils';
 import { ChooseCategory } from './ChooseCategoryView';
 import { ChooseSettings } from './ChooseSettings';
+import { Countdown } from './Countdown';
 export class GameView extends PixiGrid {
     private chooseCategory: ChooseCategory;
+    private chooseSettings: ChooseSettings;
+    private countdown: Countdown;
 
     constructor() {
         super();
@@ -41,12 +45,22 @@ export class GameView extends PixiGrid {
     }
 
     private buildSettings(): void {
-        const set = new ChooseSettings(CategoryName.OldButGold);
-        this.setChild('choose_settings', set);
+        this.chooseSettings = new ChooseSettings(CategoryName.OldButGold);
+        this.chooseSettings.on('hideComplete', () => {
+            this.chooseSettings.destroy();
+            this.addCountdown();
+        });
+        this.setChild('choose_settings', this.chooseSettings);
     }
 
     private onHintStateUpdate(state: HintState): void {
         //
+    }
+
+    private addCountdown(): void {
+        this.countdown = new Countdown();
+        this.countdown.on('countdownComplete', () => lego.event.emit(BoardEvents.CountdownComplete));
+        this.setChild('main', this.countdown);
     }
 
     private onBoardUpdate(board: BoardModel | null): void {
@@ -73,6 +87,7 @@ export class GameView extends PixiGrid {
                 this.switchToChooseTime();
                 break;
             case BoardState.Countdown:
+                this.chooseSettings.hide();
                 break;
 
             default:

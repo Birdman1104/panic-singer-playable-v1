@@ -11,3 +11,11 @@ export const onCategoryClickCommand = (categoryName: CategoryName): void => {
 
 export const onMinusClickCommand = (): void => Head.gameModel?.board?.decreaseTime();
 export const onPlusClickCommand = (): void => Head.gameModel?.board?.increaseTime();
+
+export const onStartClickCommand = (): void => {
+    lego.command.payload(BoardState.Countdown).execute(setBoardStateCommand);
+};
+
+export const onCountdownCompleteCommand = (): void => {
+    //
+};

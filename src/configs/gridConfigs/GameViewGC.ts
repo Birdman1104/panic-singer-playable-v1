@@ -12,6 +12,10 @@ const getGameViewGridLandscapeConfig = () => {
         bounds,
         cells: [
             {
+                name: 'main',
+                bounds: { x: 0, y: 0, width: 1, height: 1 },
+            },
+            {
                 name: 'choose_category',
                 bounds: { x: 0, y: 0, width: 1, height: 1 },
             },
@@ -35,6 +39,10 @@ const getGameViewGridPortraitConfig = () => {
         // debug: { color: 0xd9ff27 },
         bounds,
         cells: [
+            {
+                name: 'main',
+                bounds: { x: 0, y: 0, width: 1, height: 1 },
+            },
             {
                 name: 'choose_category',
                 bounds: { x: 0.05, y: 0, width: 0.9, height: 1 },

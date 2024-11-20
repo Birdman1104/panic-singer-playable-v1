@@ -10,7 +10,13 @@ import {
     resizeCommand,
     takeToStoreCommand,
 } from './Commands';
-import { onCategoryClickCommand, onMinusClickCommand, onPlusClickCommand } from './GameCommands';
+import {
+    onCategoryClickCommand,
+    onCountdownCompleteCommand,
+    onMinusClickCommand,
+    onPlusClickCommand,
+    onStartClickCommand,
+} from './GameCommands';
 
 export const mapCommands = () => {
     eventCommandPairs.forEach(({ event, command }) => {
@@ -64,5 +70,13 @@ const eventCommandPairs = Object.freeze([
     {
         event: ChooseSettingsEvents.PlusClick,
         command: onPlusClickCommand,
+    },
+    {
+        event: ChooseSettingsEvents.StartClick,
+        command: onStartClickCommand,
+    },
+    {
+        event: BoardEvents.CountdownComplete,
+        command: onCountdownCompleteCommand,
     },
 ]);

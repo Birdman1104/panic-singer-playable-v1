@@ -1,4 +1,5 @@
 import { lego } from '@armathai/lego';
+import anime from 'animejs';
 import { Container, Rectangle, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { DEFAULT_FONT } from '../configs/GameConfig';
@@ -6,7 +7,6 @@ import { ChooseSettingsEvents } from '../events/MainEvents';
 import { CategoryName } from '../models/CategoryModel';
 import { makeSprite } from '../utils';
 import { CategorySettings } from './CategorySettings';
-
 export class ChooseSettings extends Container {
     private cover: Sprite;
     private startButton: Sprite;
@@ -22,7 +22,17 @@ export class ChooseSettings extends Container {
     }
 
     public getBounds(): Rectangle {
-        return new Rectangle(0, 0, 600, 900);
+        return new Rectangle(-300, -450, 600, 900);
+    }
+
+    public hide(): void {
+        anime({
+            targets: this.scale,
+            x: 0,
+            duration: 300,
+            easing: 'easeInOutSine',
+            complete: () => this.emit('hideComplete'),
+        });
     }
 
     private build(): void {
@@ -35,7 +45,7 @@ export class ChooseSettings extends Container {
     private buildCover(): void {
         this.cover = makeSprite({ texture: Images[`game/${this.category}`] });
         this.cover.scale.set(400 / this.cover.width);
-        this.cover.position.set(300, 300);
+        this.cover.position.set(0, -150);
         this.addChild(this.cover);
     }
 
@@ -47,13 +57,13 @@ export class ChooseSettings extends Container {
             fontWeight: 900,
         });
         this.title.anchor.set(0.5);
-        this.title.position.set(300, 50);
+        this.title.position.set(0, -400);
         this.addChild(this.title);
     }
 
     private buildMode(): void {
         this.categorySettings = new CategorySettings();
-        this.categorySettings.position.set(300, 560);
+        this.categorySettings.position.set(0, 110);
         this.addChild(this.categorySettings);
     }
 
@@ -69,10 +79,13 @@ export class ChooseSettings extends Container {
         txt.position.set(0, 0);
         this.startButton.addChild(txt);
         this.startButton.anchor.set(0.5);
-        this.startButton.position.set(300, 830);
+        this.startButton.position.set(0, 380);
 
         this.startButton.interactive = true;
-        this.startButton.on('pointerdown', () => lego.event.emit(ChooseSettingsEvents.StartClick));
+        this.startButton.on('pointerdown', () => {
+            this.startButton.interactive = false;
+            lego.event.emit(ChooseSettingsEvents.StartClick);
+        });
         this.addChild(this.startButton);
     }
 }
