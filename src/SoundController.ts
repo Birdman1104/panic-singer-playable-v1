@@ -4,15 +4,14 @@ import { MainGameEvents } from './events/MainEvents';
 import { SoundModelEvents } from './events/ModelEvents';
 import { SoundState } from './models/SoundModel';
 import { HIGHWAY_TO_HELL } from './sounds/ACDC';
+import { I_WANT_IT_THAT_WAY } from './sounds/BackstreetBoys';
+import { STAYIN_ALIVE } from './sounds/BeeGees';
 import { BLUE } from './sounds/BillieEilish';
+import { RASPUTIN } from './sounds/BonnyM';
 import { KNOCKIN_ON_HEAVENS_DOOR } from './sounds/GunsNRoses';
 import { STARWAY_TO_HEAVEN } from './sounds/LedZeppelin';
 import { SNAP } from './sounds/RosaLin';
 import { ESPRESSO } from './sounds/Sabrina';
-import { I_WANT_IT_THAT_WAY } from './sounds/backstreetBoys';
-import { STAYIN_ALIVE } from './sounds/beeGees';
-import { RASPUTIN } from './sounds/bonnyM';
-import { CLICK_SOUND } from './sounds/click';
 
 class SoundControl {
     private sounds: { [key: string]: Howl };
@@ -27,7 +26,6 @@ class SoundControl {
     }
 
     public loadSounds(): void {
-        this.sounds.click = new Howl({ src: CLICK_SOUND });
         this.sounds.acdc = new Howl({ src: HIGHWAY_TO_HELL });
         this.sounds.backstreetBoys = new Howl({ src: I_WANT_IT_THAT_WAY });
         this.sounds.beeGees = new Howl({ src: STAYIN_ALIVE });
@@ -39,14 +37,10 @@ class SoundControl {
         this.sounds.sabrina = new Howl({ src: ESPRESSO });
     }
 
-    private playClick(): void {
-        this.sounds.click.play();
-    }
-
     private focusChange(outOfFocus: boolean): void {
         if (this.isMutedFromIcon) return;
         for (const [key, value] of Object.entries(this.sounds)) {
-            value.volume(outOfFocus ? 0 : key === 'click' ? 0.9 : 1);
+            value.volume(outOfFocus ? 0 : 1);
         }
     }
 
@@ -64,7 +58,7 @@ class SoundControl {
     private unmute(): void {
         this.isMutedFromIcon = false;
         for (const [key, value] of Object.entries(this.sounds)) {
-            value.volume(key === 'click' ? 0.9 : 1);
+            value.volume(1);
         }
     }
 }
