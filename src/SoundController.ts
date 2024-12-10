@@ -3,6 +3,15 @@ import { Howl } from 'howler';
 import { MainGameEvents } from './events/MainEvents';
 import { SoundModelEvents } from './events/ModelEvents';
 import { SoundState } from './models/SoundModel';
+import { HIGHWAY_TO_HELL } from './sounds/ACDC';
+import { BLUE } from './sounds/BillieEilish';
+import { KNOCKIN_ON_HEAVENS_DOOR } from './sounds/GunsNRoses';
+import { STARWAY_TO_HEAVEN } from './sounds/LedZeppelin';
+import { SNAP } from './sounds/RosaLin';
+import { ESPRESSO } from './sounds/Sabrina';
+import { I_WANT_IT_THAT_WAY } from './sounds/backstreetBoys';
+import { STAYIN_ALIVE } from './sounds/beeGees';
+import { RASPUTIN } from './sounds/bonnyM';
 import { CLICK_SOUND } from './sounds/click';
 
 class SoundControl {
@@ -19,6 +28,15 @@ class SoundControl {
 
     public loadSounds(): void {
         this.sounds.click = new Howl({ src: CLICK_SOUND });
+        this.sounds.acdc = new Howl({ src: HIGHWAY_TO_HELL });
+        this.sounds.backstreetBoys = new Howl({ src: I_WANT_IT_THAT_WAY });
+        this.sounds.beeGees = new Howl({ src: STAYIN_ALIVE });
+        this.sounds.billieEilish = new Howl({ src: BLUE });
+        this.sounds.bonnyM = new Howl({ src: RASPUTIN });
+        this.sounds.gunsNroses = new Howl({ src: KNOCKIN_ON_HEAVENS_DOOR });
+        this.sounds.ledZeppelin = new Howl({ src: STARWAY_TO_HEAVEN });
+        this.sounds.rosaLin = new Howl({ src: SNAP });
+        this.sounds.sabrina = new Howl({ src: ESPRESSO });
     }
 
     private playClick(): void {
