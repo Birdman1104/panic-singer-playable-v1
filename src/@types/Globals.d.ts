@@ -42,4 +42,6 @@ type PointLike = {
 type SongInfo = {
     singer: string;
     song: string;
+    isRight: boolean;
+    audio?: string;
 };

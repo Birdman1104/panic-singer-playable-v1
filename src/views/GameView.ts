@@ -92,6 +92,9 @@ export class GameView extends PixiGrid {
             case BoardState.Countdown:
                 this.chooseSettings.hide();
                 break;
+            case BoardState.PlaySong:
+                this.countdown.destroy();
+                break;
 
             default:
                 break;

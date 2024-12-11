@@ -17,6 +17,8 @@ export class BoardModel extends ObservableModel {
     private _state = BoardState.Undefined;
     private _chosenCategory: CategoryModel | null = null;
 
+    private readonly answerShowDuration = 1;
+
     constructor() {
         super('BoardModel');
 
@@ -62,6 +64,16 @@ export class BoardModel extends ObservableModel {
     public setChosenCategory(name: CategoryName): void {
         const category = this.categories.find((category) => category.name === name) || null;
         this._chosenCategory = category;
+    }
+
+    public setCategorySongs(): void {
+        if (!this._chosenCategory) return;
+        this._chosenCategory.setSongs();
+    }
+
+    public startNextWave(): void {
+        if (!this._chosenCategory) return;
+        this._chosenCategory.startNextWave();
     }
 
     public initialize(): void {

@@ -3,6 +3,8 @@ import { Container, Rectangle, Text } from 'pixi.js';
 import { delayRunnable } from '../utils';
 
 export class Countdown extends Container {
+    private text: Text;
+
     constructor() {
         super();
         this.build();
@@ -10,6 +12,12 @@ export class Countdown extends Container {
 
     public getBounds(): Rectangle {
         return new Rectangle(-200, -100, 400, 200);
+    }
+
+    public destroy(): void {
+        anime.remove(this.text);
+        anime.remove(this.text.scale);
+        super.destroy();
     }
 
     private build(): void {
@@ -22,6 +30,7 @@ export class Countdown extends Container {
         });
         text.anchor.set(0.5);
         this.addChild(text);
+        this.text = text;
 
         const animate = (text: Text, i: number) => {
             text.text = `${i === 0 ? 'LETS GO!' : i}`;

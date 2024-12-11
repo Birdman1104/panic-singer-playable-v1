@@ -1,7 +1,7 @@
 import { lego } from '@armathai/lego';
-import { BoardState } from '../models/BoardModel';
-import { CategoryName } from '../models/CategoryModel';
-import Head from '../models/HeadModel';
+import { BoardState } from '../../models/BoardModel';
+import { CategoryName } from '../../models/CategoryModel';
+import Head from '../../models/HeadModel';
 import { setBoardStateCommand } from './Commands';
 
 export const onCategoryClickCommand = (categoryName: CategoryName): void => {
@@ -17,5 +17,5 @@ export const onStartClickCommand = (): void => {
 };
 
 export const onCountdownCompleteCommand = (): void => {
-    //
+    lego.command.payload(BoardState.PlaySong).execute(setBoardStateCommand);
 };

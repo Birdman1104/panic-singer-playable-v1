@@ -9,14 +9,14 @@ import {
     onSoundToggleCommand,
     resizeCommand,
     takeToStoreCommand,
-} from './Commands';
+} from './commands/Commands';
 import {
     onCategoryClickCommand,
     onCountdownCompleteCommand,
     onMinusClickCommand,
     onPlusClickCommand,
     onStartClickCommand,
-} from './GameCommands';
+} from './commands/GameCommands';
 
 export const mapCommands = () => {
     eventCommandPairs.forEach(({ event, command }) => {

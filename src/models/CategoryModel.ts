@@ -11,6 +11,10 @@ export enum CategoryName {
 
 export class CategoryModel extends ObservableModel {
     private _songsData: SongInfo[][] = [];
+    private _currentWaveIndex = 0;
+    private _currentWave: SongInfo[] = [];
+    private _playingTime;
+    private readonly songPlayDuration = 10;
 
     constructor(private _name: CategoryName) {
         super('CategoryModel');
@@ -24,6 +28,44 @@ export class CategoryModel extends ObservableModel {
 
     public get songsData(): SongInfo[][] {
         return this._songsData;
+    }
+
+    public get currentWaveIndex(): number {
+        return this._currentWaveIndex;
+    }
+
+    public set currentWaveIndex(value: number) {
+        this._currentWaveIndex = value;
+    }
+
+    public get playingTime(): number {
+        return this._playingTime;
+    }
+
+    public set playingTime(value: number) {
+        this._playingTime = value;
+    }
+
+    public get currentSong(): SongInfo[] {
+        return this._songsData[this._currentWaveIndex];
+    }
+
+    public get currentWave(): SongInfo[] {
+        return this._currentWave;
+    }
+
+    public set currentWave(value: SongInfo[]) {
+        this._currentWave = value;
+    }
+
+    public startNextWave(): void {
+        this._currentWaveIndex = this._currentWaveIndex ? this._currentWaveIndex + 1 : 0;
+        this._currentWave = this._songsData[this._currentWaveIndex];
+    }
+
+    public setSongs(): void {
+        this._songsData = getSongsData(this._name);
+        console.warn(this._songsData);
     }
 }
 
@@ -66,7 +108,7 @@ const getRandomNames = (category: CategoryName): SongInfo[] => {
 
 const getSongsData = (category: CategoryName): SongInfo[][] => {
     const songsData = getRightSongsData(category);
-    const randomNamesData = getRandomNames(category);
+    const randomNamesData = getRandomNames(category).map((song) => ({ ...song, isRight: false }));
     const levelData: SongInfo[][] = Array.from({ length: songsData.length }, () => []);
 
     for (let i = 0; i < songsData.length; i++) {

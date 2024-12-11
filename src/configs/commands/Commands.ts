@@ -1,11 +1,11 @@
 import { lego } from '@armathai/lego';
-import { AdStatus } from '../models/AdModel';
-import { BoardState } from '../models/BoardModel';
-import { GameState } from '../models/GameModel';
-import Head from '../models/HeadModel';
-import { HintState } from '../models/HintModel';
-import { unMapCommands } from './EventCommandPairs';
-import { ctaModelGuard, gameModelGuard, hintModelGuard, hintParamGuard, soundParamGuard } from './Guards';
+import { AdStatus } from '../../models/AdModel';
+import { BoardState } from '../../models/BoardModel';
+import { GameState } from '../../models/GameModel';
+import Head from '../../models/HeadModel';
+import { HintState } from '../../models/HintModel';
+import { unMapCommands } from '../EventCommandPairs';
+import { ctaModelGuard, gameModelGuard, hintModelGuard, hintParamGuard, soundParamGuard } from '../Guards';
 
 export const initAdModelCommand = (): void => Head.initializeADModel();
 
@@ -131,6 +131,12 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
     switch (state) {
         case BoardState.ChooseCategory:
             Head.gameModel?.board?.initializeCategories();
+            break;
+        case BoardState.Countdown:
+            Head.gameModel?.board?.setCategorySongs();
+            break;
+        case BoardState.PlaySong:
+            Head.gameModel?.board?.startNextWave();
             break;
 
         default:
