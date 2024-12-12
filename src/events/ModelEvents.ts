@@ -12,6 +12,12 @@ export const BoardModelEvents = {
     ChosenCategoryUpdate: 'BoardModelChosenCategoryUpdate',
 };
 
+export const CategoryModelEvents = {
+    CurrentWaveIndexUpdate: 'CategoryModelCurrentWaveIndexUpdate',
+    PlayingTimeUpdate: 'CategoryModelPlayingTimeUpdate',
+    CurrentWaveUpdate: 'CategoryModelCurrentWaveUpdate',
+};
+
 export const CtaModelEvents = { VisibleUpdate: 'CtaModelVisibleUpdate' };
 
 export const GameModelEvents = {

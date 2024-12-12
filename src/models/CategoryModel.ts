@@ -1,5 +1,6 @@
 import { OLD_BUT_GOLD_NAMES, ROCK_SONG_NAMES, TIK_TOK_NAMES } from '../configs/RandomSongNames';
 import { OldButGold, RockHits, TikTok } from '../configs/SongsData';
+import { ChoiceModel } from './ChoiceModel';
 import { ObservableModel } from './ObservableModel';
 
 export enum CategoryName {
@@ -12,7 +13,7 @@ export enum CategoryName {
 export class CategoryModel extends ObservableModel {
     private _songsData: SongInfo[][] = [];
     private _currentWaveIndex = 0;
-    private _currentWave: SongInfo[] = [];
+    private _currentWave: ChoiceModel[] = [];
     private _playingTime;
     private readonly songPlayDuration = 10;
 
@@ -20,6 +21,7 @@ export class CategoryModel extends ObservableModel {
         super('CategoryModel');
 
         this._songsData = getSongsData(this._name);
+        this.makeObservable();
     }
 
     public get name(): CategoryName {
@@ -46,21 +48,20 @@ export class CategoryModel extends ObservableModel {
         this._playingTime = value;
     }
 
-    public get currentSong(): SongInfo[] {
-        return this._songsData[this._currentWaveIndex];
-    }
-
-    public get currentWave(): SongInfo[] {
+    public get currentWave(): ChoiceModel[] {
         return this._currentWave;
     }
 
-    public set currentWave(value: SongInfo[]) {
+    public set currentWave(value: ChoiceModel[]) {
         this._currentWave = value;
     }
 
     public startNextWave(): void {
         this._currentWaveIndex = this._currentWaveIndex ? this._currentWaveIndex + 1 : 0;
-        this._currentWave = this._songsData[this._currentWaveIndex];
+        const choices = this._songsData[this._currentWaveIndex].map(
+            (song) => new ChoiceModel(song.singer, song.song, song.isRight),
+        );
+        this._currentWave = choices;
     }
 
     public setSongs(): void {

@@ -5,8 +5,6 @@ import { CategoriesWrapper } from './CategoriesWrapper';
 export class ChooseCategory extends Container {
     constructor() {
         super();
-
-        this.build();
     }
 
     get viewName() {
@@ -16,9 +14,5 @@ export class ChooseCategory extends Container {
     public onCategoriesUpdate(categories: CategoryModel[]): void {
         this.addChild(new CategoriesWrapper(categories));
         this.emit('rebuild');
-    }
-
-    private build(): void {
-        //
     }
 }

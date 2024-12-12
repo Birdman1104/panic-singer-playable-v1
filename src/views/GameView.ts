@@ -3,31 +3,31 @@ import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
 import { BoardEvents } from '../events/MainEvents';
-import { BoardModelEvents, GameModelEvents, HintModelEvents } from '../events/ModelEvents';
-import { BoardModel, BoardState } from '../models/BoardModel';
+import { BoardModelEvents, CategoryModelEvents, HintModelEvents } from '../events/ModelEvents';
+import { BoardState } from '../models/BoardModel';
 import { CategoryModel } from '../models/CategoryModel';
 import { HintState } from '../models/HintModel';
 import { tweenToCell } from '../utils';
 import { ChooseCategory } from './ChooseCategoryView';
 import { ChooseSettings } from './ChooseSettings';
 import { Countdown } from './Countdown';
+import { Wave } from './Wave';
 export class GameView extends PixiGrid {
     private chooseCategory: ChooseCategory;
     private chooseSettings: ChooseSettings;
     private countdown: Countdown;
     private chosenCategory: CategoryModel;
+    private wave: Wave;
 
     constructor() {
         super();
 
         lego.event
-            .on(GameModelEvents.BoardUpdate, this.onBoardUpdate, this)
             .on(HintModelEvents.StateUpdate, this.onHintStateUpdate, this)
             .on(BoardModelEvents.ChosenCategoryUpdate, this.onChosenCategoryUpdate, this)
             .on(BoardModelEvents.CategoriesUpdate, this.onCategoriesUpdate, this)
+            .on(CategoryModelEvents.CurrentWaveUpdate, this.onCurrentWaveUpdate, this)
             .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
-
-        this.build();
     }
 
     public getGridConfig(): ICellConfig {
@@ -41,8 +41,6 @@ export class GameView extends PixiGrid {
     public rebuild(config?: ICellConfig | undefined): void {
         super.rebuild(this.getGridConfig());
     }
-
-    private build(): void {}
 
     private onChosenCategoryUpdate(category: CategoryModel): void {
         this.chosenCategory = category;
@@ -66,18 +64,19 @@ export class GameView extends PixiGrid {
         this.setChild('main', this.countdown);
     }
 
-    private onBoardUpdate(board: BoardModel | null): void {
-        board ? this.buildBoard() : this.destroyBoard();
-    }
-
     private onCategoriesUpdate(categories: CategoryModel[]): void {
-        this.chooseCategory.onCategoriesUpdate(categories);
+        this.chooseCategory?.onCategoriesUpdate(categories);
     }
 
-    private buildBoard() {
+    private buildChooseCategory(): void {
         this.chooseCategory = new ChooseCategory();
         this.chooseCategory.on('rebuild', this.rebuild, this);
         this.setChild('choose_category', this.chooseCategory);
+    }
+
+    private buildWave(): void {
+        this.wave = new Wave();
+        this.setChild('wave', this.wave);
     }
 
     private onBoardStateUpdate(state: BoardState): void {
@@ -85,6 +84,8 @@ export class GameView extends PixiGrid {
 
         switch (state) {
             case BoardState.ChooseCategory:
+                // this.buildWave();
+                this.buildChooseCategory();
                 break;
             case BoardState.ChooseSettings:
                 this.switchToChooseTime();
@@ -94,11 +95,19 @@ export class GameView extends PixiGrid {
                 break;
             case BoardState.PlaySong:
                 this.countdown.destroy();
+                this.buildWave();
                 break;
 
             default:
                 break;
         }
+    }
+
+    private onCurrentWaveUpdate(wave): void {
+        console.warn('onCurrentWaveUpdate', wave);
+        this.wave.updateWave(wave);
+
+        // this.wave.updateWave(wave);
     }
 
     private switchToChooseTime(): void {
@@ -109,9 +118,5 @@ export class GameView extends PixiGrid {
             duration: 300,
             easing: 'easeInOutSine',
         });
-    }
-
-    private destroyBoard(): void {
-        this.chooseCategory.destroy();
     }
 }

@@ -2,6 +2,8 @@ import anime from 'animejs';
 import { Container, Rectangle, Text } from 'pixi.js';
 import { delayRunnable } from '../utils';
 
+const DURATION = 1;
+
 export class Countdown extends Container {
     private text: Text;
 
@@ -21,8 +23,7 @@ export class Countdown extends Container {
     }
 
     private build(): void {
-        let duration = 3;
-        const text = new Text(`${duration}`, {
+        const text = new Text(`${DURATION}`, {
             fontFamily: 'Arial',
             fontSize: 40,
             fill: 0xffffff,
@@ -53,6 +54,6 @@ export class Countdown extends Container {
             });
         };
 
-        animate(text, duration);
+        animate(text, DURATION);
     }
 }
