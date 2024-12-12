@@ -14,6 +14,10 @@ export const BoardEvents = {
     CountdownComplete: 'BoardEventsCountdownComplete',
 };
 
+export const WaveEvents = {
+    ChoiceClick: 'WaveEventsChoiceClick',
+};
+
 export const ChooseSettingsEvents = {
     PlusClick: 'ChooseSettingsEventsPlusClick',
     MinusClick: 'ChooseSettingsEventsMinusClick',

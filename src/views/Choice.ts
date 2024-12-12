@@ -10,9 +10,12 @@ export const CW = 555;
 export const CH = 135;
 
 export class Choice extends Container {
+    public isActive = false;
+
     private mainBkg: NineSlicePlane;
     private resultBkg: NineSlicePlane;
     private songName: Text;
+    private uuid: string;
 
     constructor() {
         super();
@@ -31,7 +34,8 @@ export class Choice extends Container {
         });
     }
 
-    public updateChoice(artist: string, song: string): void {
+    public updateChoice(artist: string, song: string, uuid: string): void {
+        this.uuid = uuid;
         anime({
             targets: this.songName,
             alpha: 0,
@@ -44,6 +48,7 @@ export class Choice extends Container {
                     alpha: 1,
                     duration: 100,
                     easing: 'easeInOutSine',
+                    complete: () => (this.isActive = true),
                 });
             },
         });
@@ -69,6 +74,11 @@ export class Choice extends Container {
         this.mainBkg.width = CW;
         this.mainBkg.height = CH;
         this.mainBkg.tint = DEFAULT_TINT;
+        this.mainBkg.interactive = true;
+        this.mainBkg.on('pointerdown', () => {
+            if (!this.isActive) return;
+            this.emit('choiceClick', this.uuid);
+        });
         this.addChild(this.mainBkg);
     }
 
