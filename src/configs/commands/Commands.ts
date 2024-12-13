@@ -64,7 +64,7 @@ const destroyGameModelCommand = (): void => Head.destroyGameModel();
 const destroyCtaModelCommand = (): void => Head.ad?.destroyCtaModel();
 const destroySoundModelCommand = (): void => Head.ad?.destroySoundModel();
 const destroyHintModelCommand = (): void => Head.ad?.destroyHintModel();
-const setAdStatusCommand = (status: AdStatus): void => Head.ad?.setAdStatus(status);
+export const setAdStatusCommand = (status: AdStatus): void => Head.ad?.setAdStatus(status);
 
 const shutdownModelsCommand = (): void => {
     lego.command

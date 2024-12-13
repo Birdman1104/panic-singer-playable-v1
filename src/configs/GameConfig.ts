@@ -3,6 +3,8 @@ export const GAME_CONFIG = Object.freeze({
     Hint: true,
     Sound: true,
 
+    MaxWave: 2,
+
     IdleTime: -1, // Seconds. Если игрок бездействует столько секунд,игра идет в стор
 
     // Параметры для разных версий

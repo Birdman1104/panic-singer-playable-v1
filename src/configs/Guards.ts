@@ -41,3 +41,7 @@ export const isTutorialModeGuard = (): boolean => {
 export const isRightChoiceGuard = (uuid): boolean => {
     return !!Head.gameModel?.board?.isRightChoice(uuid);
 };
+
+export const reachedFinalWaveGuard = (): boolean => {
+    return Head.gameModel?.board?.chosenCategory?.currentWaveIndex === GAME_CONFIG.MaxWave;
+};

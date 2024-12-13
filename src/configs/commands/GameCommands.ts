@@ -1,8 +1,10 @@
 import { lego } from '@armathai/lego';
+import { AdStatus } from '../../models/AdModel';
 import { BoardState } from '../../models/BoardModel';
 import { CategoryName } from '../../models/CategoryModel';
 import Head from '../../models/HeadModel';
-import { setBoardStateCommand } from './Commands';
+import { reachedFinalWaveGuard } from '../Guards';
+import { setAdStatusCommand, setBoardStateCommand, takeToStoreCommand } from './Commands';
 
 export const onCategoryClickCommand = (categoryName: CategoryName): void => {
     Head.gameModel?.board?.setChosenCategory(categoryName);
@@ -23,7 +25,17 @@ export const onCountdownCompleteCommand = (): void => {
 };
 
 export const onChoiceClickCommand = (uuid: string): void => {
-    lego.command.execute(revealAnswersCommand);
+    lego.command
+
+        .guard(reachedFinalWaveGuard)
+        .payload(AdStatus.Cta)
+        .execute(setAdStatusCommand)
+
+        .guard(reachedFinalWaveGuard)
+        .execute(takeToStoreCommand)
+
+        .guard(lego.not(reachedFinalWaveGuard))
+        .execute(revealAnswersCommand);
 };
 
 export const onAnswerShowCompleteCommand = (): void => {

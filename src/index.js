@@ -22,8 +22,8 @@ function isAppleDevice() {
 
 window.CTACallImitation = () => {
     if (isAppleDevice()) {
-        window.open('https://apps.apple.com/ru/app/global-city-build-a-megapolis/id1455860184?l=en-GB');
+        window.open('https://apps.apple.com/am/app/panic-singer/id1627521473');
     } else {
-        window.open('https://play.google.com/store/apps/details?id=com.rbx.city.android&hl=en');
+        window.open('https://play.google.com/store/apps/details?id=com.Vahagn.panic_android&hl=en');
     }
 };
