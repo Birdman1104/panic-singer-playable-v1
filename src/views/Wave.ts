@@ -2,7 +2,6 @@ import { lego } from '@armathai/lego';
 import { Container, Rectangle } from 'pixi.js';
 import { WaveEvents } from '../events/MainEvents';
 import { ChoiceModel } from '../models/ChoiceModel';
-import { drawBounds } from '../utils';
 import { CH, CW, Choice } from './Choice';
 import { WaveTimer } from './WaveTimer';
 
@@ -15,7 +14,7 @@ export class Wave extends Container {
 
         this.build();
 
-        drawBounds(this);
+        // drawBounds(this);
     }
 
     public getBounds(): Rectangle {
@@ -26,6 +25,15 @@ export class Wave extends Container {
         waveData.forEach((choice, index) => {
             this.choices[index].updateChoice(choice.singer, choice.song, choice.uuid);
         });
+    }
+
+    public revealAnswers(uuid: string, isRight: boolean): void {
+        this.choices.find((choice) => choice.uuid === uuid)?.reveal(isRight);
+        // this.choices.forEach((choice) => {
+        //     if (choice.uuid === uuid) {
+        //         choice.reveal(isRight);
+        //     }
+        // });
     }
 
     private build(): void {
@@ -46,8 +54,6 @@ export class Wave extends Container {
 
     private onChoiceClick(uuid: string): void {
         this.choices.forEach((choice) => (choice.isActive = false));
-        console.warn('Choice clicked', uuid);
-
         lego.event.emit(WaveEvents.ChoiceClick, uuid);
     }
 

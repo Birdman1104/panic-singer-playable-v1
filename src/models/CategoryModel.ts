@@ -56,17 +56,24 @@ export class CategoryModel extends ObservableModel {
         this._currentWave = value;
     }
 
+    public isRightChoice(uuid: string): boolean {
+        return this._currentWave.find((choice) => choice.uuid === uuid)?.isRight || false;
+    }
+
+    public revealAnswers(): void {
+        this._songsData[this._currentWaveIndex].forEach((d, i) => {
+            this._currentWave[i].isRight = d.isRight;
+        });
+    }
+
     public startNextWave(): void {
         this._currentWaveIndex = this._currentWaveIndex ? this._currentWaveIndex + 1 : 0;
-        const choices = this._songsData[this._currentWaveIndex].map(
-            (song) => new ChoiceModel(song.singer, song.song, song.isRight),
-        );
+        const choices = this._songsData[this._currentWaveIndex].map((song) => new ChoiceModel(song.singer, song.song));
         this._currentWave = choices;
     }
 
     public setSongs(): void {
         this._songsData = getSongsData(this._name);
-        console.warn(this._songsData);
     }
 }
 

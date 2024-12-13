@@ -1,5 +1,12 @@
 import { lego } from '@armathai/lego';
-import { BoardEvents, ChooseSettingsEvents, MainGameEvents, SoundEvents, TakeMe } from '../events/MainEvents';
+import {
+    BoardEvents,
+    ChooseSettingsEvents,
+    MainGameEvents,
+    SoundEvents,
+    TakeMe,
+    WaveEvents,
+} from '../events/MainEvents';
 import { AdModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
@@ -12,6 +19,7 @@ import {
 } from './commands/Commands';
 import {
     onCategoryClickCommand,
+    onChoiceClickCommand,
     onCountdownCompleteCommand,
     onMinusClickCommand,
     onPlusClickCommand,
@@ -78,5 +86,9 @@ const eventCommandPairs = Object.freeze([
     {
         event: BoardEvents.CountdownComplete,
         command: onCountdownCompleteCommand,
+    },
+    {
+        event: WaveEvents.ChoiceClick,
+        command: onChoiceClickCommand,
     },
 ]);

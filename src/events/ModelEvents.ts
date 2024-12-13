@@ -18,6 +18,11 @@ export const CategoryModelEvents = {
     CurrentWaveUpdate: 'CategoryModelCurrentWaveUpdate',
 };
 
+export const ChoiceModelEvents = {
+    IsRightUpdate: 'ChoiceModelIsRightUpdate',
+    IsRevealedUpdate: 'ChoiceModelIsRevealedUpdate',
+};
+
 export const CtaModelEvents = { VisibleUpdate: 'CtaModelVisibleUpdate' };
 
 export const GameModelEvents = {

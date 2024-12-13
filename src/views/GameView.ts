@@ -3,7 +3,7 @@ import { ICellConfig, PixiGrid } from '@armathai/pixi-grid';
 import anime from 'animejs';
 import { getGameViewGridConfig } from '../configs/gridConfigs/GameViewGC';
 import { BoardEvents } from '../events/MainEvents';
-import { BoardModelEvents, CategoryModelEvents, HintModelEvents } from '../events/ModelEvents';
+import { BoardModelEvents, CategoryModelEvents, ChoiceModelEvents, HintModelEvents } from '../events/ModelEvents';
 import { BoardState } from '../models/BoardModel';
 import { CategoryModel } from '../models/CategoryModel';
 import { HintState } from '../models/HintModel';
@@ -27,6 +27,7 @@ export class GameView extends PixiGrid {
             .on(BoardModelEvents.ChosenCategoryUpdate, this.onChosenCategoryUpdate, this)
             .on(BoardModelEvents.CategoriesUpdate, this.onCategoriesUpdate, this)
             .on(CategoryModelEvents.CurrentWaveUpdate, this.onCurrentWaveUpdate, this)
+            .on(ChoiceModelEvents.IsRightUpdate, this.onChoiceRightUpdate, this)
             .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
     }
 
@@ -106,8 +107,11 @@ export class GameView extends PixiGrid {
     private onCurrentWaveUpdate(wave): void {
         console.warn('onCurrentWaveUpdate', wave);
         this.wave.updateWave(wave);
+    }
 
-        // this.wave.updateWave(wave);
+    private onChoiceRightUpdate(isRight: boolean, prev: boolean, uuid: string): void {
+        if (!this.wave) return;
+        this.wave.revealAnswers(uuid, isRight);
     }
 
     private switchToChooseTime(): void {

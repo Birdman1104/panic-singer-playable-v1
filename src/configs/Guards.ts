@@ -38,3 +38,6 @@ export const isTutorialModeGuard = (): boolean => {
     return !!Head.gameModel?.isTutorial;
 };
 
+export const isRightChoiceGuard = (uuid): boolean => {
+    return !!Head.gameModel?.board?.isRightChoice(uuid);
+};

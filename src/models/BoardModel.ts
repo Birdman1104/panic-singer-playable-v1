@@ -61,6 +61,16 @@ export class BoardModel extends ObservableModel {
         this._state = state;
     }
 
+    public isRightChoice(uuid: string): boolean {
+        if (!this._chosenCategory) return false;
+        return this._chosenCategory.isRightChoice(uuid);
+    }
+
+    public revealAnswers(): void {
+        if (!this._chosenCategory) return;
+        this._chosenCategory.revealAnswers();
+    }
+
     public setChosenCategory(name: CategoryName): void {
         const category = this.categories.find((category) => category.name === name) || null;
         this._chosenCategory = category;

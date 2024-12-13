@@ -1,8 +1,13 @@
 import { ObservableModel } from './ObservableModel';
 
 export class ChoiceModel extends ObservableModel {
-    constructor(private _singer, private _song, private _isCorrect) {
+    private _isRight: boolean | null = null;
+    private _isRevealed = false;
+
+    constructor(private _singer, private _song) {
         super('ChoiceModel');
+
+        this.makeObservable();
     }
 
     public get singer(): string {
@@ -13,7 +18,23 @@ export class ChoiceModel extends ObservableModel {
         return this._song;
     }
 
-    public get isCorrect(): boolean {
-        return this._isCorrect;
+    public get isRight(): boolean | null {
+        return this._isRight;
+    }
+
+    public set isRight(value: boolean | null) {
+        this._isRight = value;
+    }
+
+    public get isRevealed(): boolean {
+        return this._isRevealed;
+    }
+
+    public set isRevealed(value: boolean) {
+        this._isRevealed = value;
+    }
+
+    public reveal(): void {
+        this._isRevealed = true;
     }
 }
