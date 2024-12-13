@@ -4,7 +4,7 @@
     "description": "Playables Template Pixi",
     "main": "index.js",
     "scripts": {
-        "start": "node ./scripts/start.app.js",
+        "start": "npm run generateEventNames && node ./scripts/start.app.js",
         "lint": "tsc --noEmit && eslint src --fix",
         "build": "node ./scripts/build.app.js",
         "generateEventNames": "node nodeScripts/GenerateEventNames.js",

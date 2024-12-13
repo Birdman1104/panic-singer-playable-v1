@@ -1,7 +1,7 @@
 import { lego } from '@armathai/lego';
 import { Howl } from 'howler';
-import { MainGameEvents } from './events/MainEvents';
-import { SoundModelEvents } from './events/ModelEvents';
+import { MainGameEvents, WaveEvents } from './events/MainEvents';
+import { CategoryModelEvents, SoundModelEvents } from './events/ModelEvents';
 import { SoundState } from './models/SoundModel';
 import { HIGHWAY_TO_HELL } from './sounds/ACDC';
 import { I_WANT_IT_THAT_WAY } from './sounds/BackstreetBoys';
@@ -13,28 +13,74 @@ import { STARWAY_TO_HEAVEN } from './sounds/LedZeppelin';
 import { SNAP } from './sounds/RosaLin';
 import { ESPRESSO } from './sounds/Sabrina';
 
+export const AUDIO_DATA = [
+    {
+        key: 'acdc',
+        sound: HIGHWAY_TO_HELL,
+    },
+    {
+        key: 'backstreetBoys',
+        sound: I_WANT_IT_THAT_WAY,
+    },
+    {
+        key: 'beeGees',
+        sound: STAYIN_ALIVE,
+    },
+    {
+        key: 'billieEilish',
+        sound: BLUE,
+    },
+    {
+        key: 'bonnyM',
+        sound: RASPUTIN,
+    },
+    {
+        key: 'gunsNroses',
+        sound: KNOCKIN_ON_HEAVENS_DOOR,
+    },
+    {
+        key: 'ledZeppelin',
+        sound: STARWAY_TO_HEAVEN,
+    },
+    {
+        key: 'rosaLin',
+        sound: SNAP,
+    },
+    {
+        key: 'sabrina',
+        sound: ESPRESSO,
+    },
+];
+
 class SoundControl {
     private sounds: { [key: string]: Howl };
     private isMutedFromIcon = false;
+
+    private currentSong: string;
 
     public constructor() {
         this.sounds = {};
 
         lego.event
             .on(MainGameEvents.MuteUpdate, this.focusChange, this)
-            .on(SoundModelEvents.StateUpdate, this.onSoundStateUpdate, this);
+            .on(SoundModelEvents.StateUpdate, this.onSoundStateUpdate, this)
+            .on(WaveEvents.ChoiceClick, this.onStopCurrentSong, this)
+            .on(CategoryModelEvents.CurrentSongUpdate, this.onCurrentSongUpdate, this);
     }
 
     public loadSounds(): void {
-        this.sounds.acdc = new Howl({ src: HIGHWAY_TO_HELL });
-        this.sounds.backstreetBoys = new Howl({ src: I_WANT_IT_THAT_WAY });
-        this.sounds.beeGees = new Howl({ src: STAYIN_ALIVE });
-        this.sounds.billieEilish = new Howl({ src: BLUE });
-        this.sounds.bonnyM = new Howl({ src: RASPUTIN });
-        this.sounds.gunsNroses = new Howl({ src: KNOCKIN_ON_HEAVENS_DOOR });
-        this.sounds.ledZeppelin = new Howl({ src: STARWAY_TO_HEAVEN });
-        this.sounds.rosaLin = new Howl({ src: SNAP });
-        this.sounds.sabrina = new Howl({ src: ESPRESSO });
+        AUDIO_DATA.forEach(({ key, sound }) => {
+            this.sounds[key] = new Howl({ src: sound });
+        });
+    }
+
+    private onCurrentSongUpdate(key: string): void {
+        this.currentSong = key;
+        this.sounds[key]?.play();
+    }
+
+    private onStopCurrentSong(): void {
+        this.sounds[this.currentSong]?.stop();
     }
 
     private focusChange(outOfFocus: boolean): void {

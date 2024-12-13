@@ -14,6 +14,7 @@ export class CategoryModel extends ObservableModel {
     private _songsData: SongInfo[][] = [];
     private _currentWaveIndex = -1;
     private _currentWave: ChoiceModel[] = [];
+    private _currentSong: string = '';
     private _playingTime;
     private readonly songPlayDuration = 10;
 
@@ -56,6 +57,14 @@ export class CategoryModel extends ObservableModel {
         this._currentWave = value;
     }
 
+    public get currentSong(): string {
+        return this._currentSong;
+    }
+
+    public set currentSong(value: string) {
+        this._currentSong = value;
+    }
+
     public isRightChoice(uuid: string): boolean {
         return this._currentWave.find((choice) => choice.uuid === uuid)?.isRight || false;
     }
@@ -68,8 +77,9 @@ export class CategoryModel extends ObservableModel {
 
     public startNextWave(): void {
         this._currentWaveIndex += 1;
-        const choices = this._songsData[this._currentWaveIndex].map((song) => new ChoiceModel(song.singer, song.song));
-        this._currentWave = choices;
+        this._currentWave = this._songsData[this._currentWaveIndex].map((s) => new ChoiceModel(s.singer, s.song));
+        console.warn(this._songsData[this._currentWaveIndex]);
+        this._currentSong = this._songsData[this._currentWaveIndex].find((s) => s.key)!.key || '';
     }
 
     public setSongs(): void {
@@ -117,15 +127,15 @@ const getRandomNames = (category: CategoryName): SongInfo[] => {
 const getSongsData = (category: CategoryName): SongInfo[][] => {
     const songsData = getRightSongsData(category);
     const randomNamesData = getRandomNames(category).map((song) => ({ ...song, isRight: false }));
-    const levelData: SongInfo[][] = Array.from({ length: songsData.length }, () => []);
+    const songs: SongInfo[][] = Array.from({ length: songsData.length }, () => []);
 
     for (let i = 0; i < songsData.length; i++) {
         let arr: SongInfo[] = [songsData[i]];
         for (let i = 0; i < 3; i++) {
             arr.push(randomNamesData.shift() as SongInfo);
         }
-        levelData[i] = arr.sort(() => Math.random() - 0.5);
+        songs[i] = arr.sort(() => Math.random() - 0.5);
     }
 
-    return levelData;
+    return songs;
 };

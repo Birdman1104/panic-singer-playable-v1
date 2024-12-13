@@ -44,4 +44,5 @@ type SongInfo = {
     song: string;
     isRight: boolean;
     audio?: string;
+    key?: string;
 };
