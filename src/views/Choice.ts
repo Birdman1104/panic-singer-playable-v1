@@ -1,6 +1,10 @@
+import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, NineSlicePlane, Text, Texture } from 'pixi.js';
 import { Images } from '../assets';
+import { ANSWER_SHOW_DURATION } from '../configs/constants';
+import { WaveEvents } from '../events/MainEvents';
+import { delayRunnable } from '../utils';
 
 const DEFAULT_TINT = 0x4746a6;
 const WRONG_TINT = 0xdc263d;
@@ -36,6 +40,13 @@ export class Choice extends Container {
             alpha: 1,
             duration: 200,
             easing: 'easeInOutSine',
+            complete: () => {
+                if (isCorrect) {
+                    delayRunnable(ANSWER_SHOW_DURATION, () => {
+                        lego.event.emit(WaveEvents.AnswerShowComplete);
+                    });
+                }
+            },
         });
     }
 

@@ -12,7 +12,7 @@ export enum CategoryName {
 
 export class CategoryModel extends ObservableModel {
     private _songsData: SongInfo[][] = [];
-    private _currentWaveIndex = 0;
+    private _currentWaveIndex = -1;
     private _currentWave: ChoiceModel[] = [];
     private _playingTime;
     private readonly songPlayDuration = 10;
@@ -67,7 +67,7 @@ export class CategoryModel extends ObservableModel {
     }
 
     public startNextWave(): void {
-        this._currentWaveIndex = this._currentWaveIndex ? this._currentWaveIndex + 1 : 0;
+        this._currentWaveIndex += 1;
         const choices = this._songsData[this._currentWaveIndex].map((song) => new ChoiceModel(song.singer, song.song));
         this._currentWave = choices;
     }

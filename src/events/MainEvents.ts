@@ -16,6 +16,7 @@ export const BoardEvents = {
 
 export const WaveEvents = {
     ChoiceClick: 'WaveEventsChoiceClick',
+    AnswerShowComplete: 'WaveEventsAnswerShowComplete',
 };
 
 export const ChooseSettingsEvents = {

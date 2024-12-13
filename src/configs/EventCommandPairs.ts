@@ -18,6 +18,7 @@ import {
     takeToStoreCommand,
 } from './commands/Commands';
 import {
+    onAnswerShowCompleteCommand,
     onCategoryClickCommand,
     onChoiceClickCommand,
     onCountdownCompleteCommand,
@@ -90,5 +91,9 @@ const eventCommandPairs = Object.freeze([
     {
         event: WaveEvents.ChoiceClick,
         command: onChoiceClickCommand,
+    },
+    {
+        event: WaveEvents.AnswerShowComplete,
+        command: onAnswerShowCompleteCommand,
     },
 ]);

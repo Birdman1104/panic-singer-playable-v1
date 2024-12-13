@@ -25,3 +25,7 @@ export const onCountdownCompleteCommand = (): void => {
 export const onChoiceClickCommand = (uuid: string): void => {
     lego.command.execute(revealAnswersCommand);
 };
+
+export const onAnswerShowCompleteCommand = (): void => {
+    Head.gameModel?.board?.startNextWave();
+};
