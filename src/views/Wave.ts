@@ -1,6 +1,7 @@
 import { lego } from '@armathai/lego';
 import { Container, Rectangle } from 'pixi.js';
 import { WaveEvents } from '../events/MainEvents';
+import { CategoryModelEvents } from '../events/ModelEvents';
 import { ChoiceModel } from '../models/ChoiceModel';
 import { CH, CW, Choice } from './Choice';
 import { WaveTimer } from './WaveTimer';
@@ -8,13 +9,26 @@ import { WaveTimer } from './WaveTimer';
 export class Wave extends Container {
     private choices: Choice[] = [];
     private timer: WaveTimer;
+    private timerCompleted = false;
 
     constructor() {
         super();
 
+        lego.event
+            .on(CategoryModelEvents.PlayingTimeUpdate, this.onPlayingTimeUpdate, this)
+            .on(CategoryModelEvents.TimerCompletedUpdate, this.onTimerCompletedUpdate, this);
+
         this.build();
 
         // drawBounds(this);
+    }
+
+    public destroy(): void {
+        lego.event
+            .off(CategoryModelEvents.PlayingTimeUpdate, this.onPlayingTimeUpdate, this)
+            .off(CategoryModelEvents.TimerCompletedUpdate, this.onTimerCompletedUpdate, this);
+
+        super.destroy();
     }
 
     public getBounds(): Rectangle {
@@ -28,12 +42,11 @@ export class Wave extends Container {
     }
 
     public revealAnswers(uuid: string, isRight: boolean): void {
-        this.choices.find((choice) => choice.uuid === uuid)?.reveal(isRight);
-        // this.choices.forEach((choice) => {
-        //     if (choice.uuid === uuid) {
-        //         choice.reveal(isRight);
-        //     }
-        // });
+        this.choices.find((choice) => choice.uuid === uuid)?.reveal(isRight, this.timerCompleted);
+    }
+
+    private onTimerCompletedUpdate(timerCompleted: boolean): void {
+        this.timerCompleted = timerCompleted;
     }
 
     private build(): void {
@@ -62,5 +75,9 @@ export class Wave extends Container {
         this.timer.y = 0;
         this.timer.x = CW / 2 - this.timer.width / 2;
         this.addChild(this.timer);
+    }
+
+    private onPlayingTimeUpdate(playingTime: number): void {
+        console.log('playingTime', playingTime);
     }
 }

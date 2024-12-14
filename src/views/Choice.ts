@@ -9,6 +9,7 @@ import { delayRunnable } from '../utils';
 const DEFAULT_TINT = 0x4746a6;
 const WRONG_TINT = 0xdc263d;
 const CORRECT_TINT = 0x569b3e;
+const TIMER_TINT = 0xdd963e;
 
 export const CW = 555;
 export const CH = 135;
@@ -32,8 +33,8 @@ export class Choice extends Container {
         return this._uuid;
     }
 
-    public reveal(isCorrect: boolean): void {
-        this.resultBkg.tint = isCorrect ? CORRECT_TINT : this.isClicked ? WRONG_TINT : DEFAULT_TINT;
+    public reveal(isCorrect: boolean, timerCompleted: boolean): void {
+        this.resultBkg.tint = this.getTint(isCorrect, timerCompleted);
 
         anime({
             targets: this.resultBkg,
@@ -122,5 +123,17 @@ export class Choice extends Container {
         this.songName.anchor.set(0.5);
         this.songName.position.set(CW / 2, CH / 2);
         this.addChild(this.songName);
+    }
+
+    private getTint(isCorrect: boolean, timerCompleted: boolean): number {
+        if (isCorrect && timerCompleted) {
+            return TIMER_TINT;
+        } else if (isCorrect) {
+            return CORRECT_TINT;
+        } else if (this.isClicked) {
+            return WRONG_TINT;
+        } else {
+            return DEFAULT_TINT;
+        }
     }
 }

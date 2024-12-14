@@ -17,6 +17,7 @@ export const CategoryModelEvents = {
     PlayingTimeUpdate: 'CategoryModelPlayingTimeUpdate',
     CurrentWaveUpdate: 'CategoryModelCurrentWaveUpdate',
     CurrentSongUpdate: 'CategoryModelCurrentSongUpdate',
+    TimerCompletedUpdate: 'CategoryModelTimerCompletedUpdate',
 };
 
 export const ChoiceModelEvents = {

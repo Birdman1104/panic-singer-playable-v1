@@ -76,6 +76,7 @@ export class GameView extends PixiGrid {
     }
 
     private buildWave(): void {
+        if (this.wave) return;
         this.wave = new Wave();
         this.setChild('wave', this.wave);
     }
@@ -105,7 +106,6 @@ export class GameView extends PixiGrid {
     }
 
     private onCurrentWaveUpdate(wave): void {
-        console.warn('onCurrentWaveUpdate', wave);
         this.wave.updateWave(wave);
     }
 

@@ -1,5 +1,6 @@
 import { OLD_BUT_GOLD_NAMES, ROCK_SONG_NAMES, TIK_TOK_NAMES } from '../configs/RandomSongNames';
 import { OldButGold, RockHits, TikTok } from '../configs/SongsData';
+import { delayRunnable } from '../utils';
 import { ChoiceModel } from './ChoiceModel';
 import { ObservableModel } from './ObservableModel';
 
@@ -10,13 +11,16 @@ export enum CategoryName {
     OldButGold = 'old_but_gold',
 }
 
+const SONG_PLAY_DURATION = 3; // seconds
+
 export class CategoryModel extends ObservableModel {
     private _songsData: SongInfo[][] = [];
     private _currentWaveIndex = -1;
     private _currentWave: ChoiceModel[] = [];
     private _currentSong: string = '';
-    private _playingTime;
-    private readonly songPlayDuration = 10;
+    private _playingTime = SONG_PLAY_DURATION;
+    private _timerCompleted = false;
+    private isPlaying = false;
 
     constructor(private _name: CategoryName) {
         super('CategoryModel');
@@ -65,25 +69,62 @@ export class CategoryModel extends ObservableModel {
         this._currentSong = value;
     }
 
+    public get timerCompleted(): boolean {
+        return this._timerCompleted;
+    }
+
+    public set timerCompleted(value: boolean) {
+        this._timerCompleted = value;
+    }
+
     public isRightChoice(uuid: string): boolean {
         return this._currentWave.find((choice) => choice.uuid === uuid)?.isRight || false;
     }
 
     public revealAnswers(): void {
+        this.isPlaying = false;
         this._songsData[this._currentWaveIndex].forEach((d, i) => {
             this._currentWave[i].isRight = d.isRight;
         });
+        // this.stopCountdown();
     }
 
     public startNextWave(): void {
+        this._timerCompleted = false;
+        this._playingTime = SONG_PLAY_DURATION;
         this._currentWaveIndex += 1;
         this._currentWave = this._songsData[this._currentWaveIndex].map((s) => new ChoiceModel(s.singer, s.song));
-        console.warn(this._songsData[this._currentWaveIndex]);
         this._currentSong = this._songsData[this._currentWaveIndex].find((s) => s.key)!.key || '';
+        this.isPlaying = true;
+        // this.startCountdown();
     }
 
     public setSongs(): void {
         this._songsData = getSongsData(this._name);
+    }
+
+    public startCountdown(): void {
+        const countdown = () => {
+            delayRunnable(1, () => {
+                if (this.isPlaying) {
+                    this._playingTime -= 1;
+
+                    if (this._playingTime <= 0) {
+                        this.stopCountdown();
+                    } else {
+                        countdown();
+                    }
+                }
+            });
+        };
+
+        countdown();
+    }
+
+    private stopCountdown(): void {
+        this.timerCompleted = true;
+        this.isPlaying = false;
+        this._playingTime = SONG_PLAY_DURATION;
     }
 }
 

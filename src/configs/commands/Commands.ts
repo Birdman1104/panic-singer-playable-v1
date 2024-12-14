@@ -137,6 +137,10 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
             break;
         case BoardState.PlaySong:
             Head.gameModel?.board?.startNextWave();
+            Head.gameModel?.board?.startCountdown();
+            break;
+        case BoardState.ShowAnswer:
+            setTimeout(() => Head.gameModel?.board?.revealAnswers());
             break;
 
         default:

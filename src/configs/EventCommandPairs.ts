@@ -7,7 +7,7 @@ import {
     TakeMe,
     WaveEvents,
 } from '../events/MainEvents';
-import { AdModelEvents, BoardModelEvents, GameModelEvents } from '../events/ModelEvents';
+import { AdModelEvents, BoardModelEvents, CategoryModelEvents, GameModelEvents } from '../events/ModelEvents';
 import {
     onAdStatusUpdateCommand,
     onBoardStateUpdateCommand,
@@ -24,6 +24,7 @@ import {
     onCountdownCompleteCommand,
     onMinusClickCommand,
     onPlusClickCommand,
+    onSongTimerCompletedCommand,
     onStartClickCommand,
 } from './commands/GameCommands';
 
@@ -95,5 +96,9 @@ const eventCommandPairs = Object.freeze([
     {
         event: WaveEvents.AnswerShowComplete,
         command: onAnswerShowCompleteCommand,
+    },
+    {
+        event: CategoryModelEvents.TimerCompletedUpdate,
+        command: onSongTimerCompletedCommand,
     },
 ]);

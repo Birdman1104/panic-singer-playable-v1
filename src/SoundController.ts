@@ -1,7 +1,8 @@
 import { lego } from '@armathai/lego';
 import { Howl } from 'howler';
 import { MainGameEvents, WaveEvents } from './events/MainEvents';
-import { CategoryModelEvents, SoundModelEvents } from './events/ModelEvents';
+import { BoardModelEvents, CategoryModelEvents, SoundModelEvents } from './events/ModelEvents';
+import { BoardState } from './models/BoardModel';
 import { SoundState } from './models/SoundModel';
 import { HIGHWAY_TO_HELL } from './sounds/ACDC';
 import { I_WANT_IT_THAT_WAY } from './sounds/BackstreetBoys';
@@ -65,6 +66,7 @@ class SoundControl {
             .on(MainGameEvents.MuteUpdate, this.focusChange, this)
             .on(SoundModelEvents.StateUpdate, this.onSoundStateUpdate, this)
             .on(WaveEvents.ChoiceClick, this.onStopCurrentSong, this)
+            .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this)
             .on(CategoryModelEvents.CurrentSongUpdate, this.onCurrentSongUpdate, this);
     }
 
@@ -77,6 +79,12 @@ class SoundControl {
     private onCurrentSongUpdate(key: string): void {
         this.currentSong = key;
         this.sounds[key]?.play();
+    }
+
+    private onBoardStateUpdate(state: BoardState): void {
+        if (state === BoardState.ShowAnswer || state === BoardState.ShowChosenAnswer) {
+            this.onStopCurrentSong();
+        }
     }
 
     private onStopCurrentSong(): void {

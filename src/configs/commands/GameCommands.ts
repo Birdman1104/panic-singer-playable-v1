@@ -35,9 +35,16 @@ export const onChoiceClickCommand = (uuid: string): void => {
         .execute(takeToStoreCommand)
 
         .guard(lego.not(reachedFinalWaveGuard))
-        .execute(revealAnswersCommand);
+        .payload(BoardState.ShowAnswer)
+        .execute(setBoardStateCommand);
 };
 
 export const onAnswerShowCompleteCommand = (): void => {
-    Head.gameModel?.board?.startNextWave();
+    console.warn('onAnswerShowCompleteCommand');
+
+    lego.command.payload(BoardState.PlaySong).execute(setBoardStateCommand);
+};
+
+export const onSongTimerCompletedCommand = (completed: boolean): void => {
+    completed && lego.command.payload(BoardState.ShowAnswer).execute(setBoardStateCommand);
 };
