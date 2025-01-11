@@ -40,8 +40,6 @@ export const onChoiceClickCommand = (uuid: string): void => {
 };
 
 export const onAnswerShowCompleteCommand = (): void => {
-    console.warn('onAnswerShowCompleteCommand');
-
     lego.command.payload(BoardState.PlaySong).execute(setBoardStateCommand);
 };
 

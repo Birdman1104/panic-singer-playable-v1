@@ -136,11 +136,16 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
             Head.gameModel?.board?.setCategorySongs();
             break;
         case BoardState.PlaySong:
+            // TODO - check if the game ends
             Head.gameModel?.board?.startNextWave();
             Head.gameModel?.board?.startCountdown();
             break;
         case BoardState.ShowAnswer:
-            setTimeout(() => Head.gameModel?.board?.revealAnswers());
+            Head.gameModel?.board?.stopWaveTimer();
+            setTimeout(() => {
+                //     Head.gameModel?.board?.resetWaveTimer();
+                Head.gameModel?.board?.revealAnswers();
+            });
             break;
 
         default:

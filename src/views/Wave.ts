@@ -15,6 +15,8 @@ export class Wave extends Container {
         super();
 
         lego.event
+            .on(WaveEvents.AnswerShowComplete, this.onAnswerShowComplete, this)
+            .on(CategoryModelEvents.IsPlayingUpdate, this.onIsPlayingUpdate, this)
             .on(CategoryModelEvents.PlayingTimeUpdate, this.onPlayingTimeUpdate, this)
             .on(CategoryModelEvents.TimerCompletedUpdate, this.onTimerCompletedUpdate, this);
 
@@ -36,6 +38,7 @@ export class Wave extends Container {
     }
 
     public updateWave(waveData: ChoiceModel[]): void {
+        this.timer.resetProgress();
         waveData.forEach((choice, index) => {
             this.choices[index].updateChoice(choice.singer, choice.song, choice.uuid);
         });
@@ -78,6 +81,14 @@ export class Wave extends Container {
     }
 
     private onPlayingTimeUpdate(playingTime: number): void {
-        console.log('playingTime', playingTime);
+        // this.timer?.updateProgress(playingTime);
+    }
+
+    private onAnswerShowComplete(): void {
+        // this.timer.resetProgress();
+    }
+
+    private onIsPlayingUpdate(isPlaying: boolean): void {
+        isPlaying ? this.timer.resetProgress() : this.timer.stopTimer();
     }
 }

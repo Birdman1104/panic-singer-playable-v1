@@ -86,7 +86,6 @@ export class GameView extends PixiGrid {
 
         switch (state) {
             case BoardState.ChooseCategory:
-                // this.buildWave();
                 this.buildChooseCategory();
                 break;
             case BoardState.ChooseSettings:
@@ -98,6 +97,10 @@ export class GameView extends PixiGrid {
             case BoardState.PlaySong:
                 this.countdown.destroy();
                 this.buildWave();
+                break;
+            case BoardState.ShowAnswer:
+                // this.countdown.destroy();
+                // this.buildWave();
                 break;
 
             default:

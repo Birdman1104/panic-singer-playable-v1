@@ -89,9 +89,14 @@ export class BoardModel extends ObservableModel {
     public startCountdown(): void {
         if (!this._chosenCategory) return;
         this._chosenCategory.startCountdown();
-        // setTimeout(() => {
-        //     this.setState(BoardState.ShowAnswer);
-        // }, this._time * 1000);
+    }
+
+    public resetWaveTimer(): void {
+        this._chosenCategory?.resetWaveTimer();
+    }
+
+    public stopWaveTimer(): void {
+        this._chosenCategory?.stopWaveTimer();
     }
 
     public initialize(): void {
