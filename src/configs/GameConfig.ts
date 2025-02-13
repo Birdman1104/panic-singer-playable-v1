@@ -1,5 +1,5 @@
 export const GAME_CONFIG = Object.freeze({
-    HintOnIdle: 15, // Seconds
+    HintOnIdle: 2, // Seconds
     Hint: true,
     Sound: true,
 

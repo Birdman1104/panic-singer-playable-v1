@@ -2,22 +2,24 @@ import { lego } from '@armathai/lego';
 import anime from 'animejs';
 import { Container, Point, Sprite } from 'pixi.js';
 import { Images } from '../assets';
-import { GameModelEvents, HintModelEvents } from '../events/ModelEvents';
+import { BoardModelEvents, GameModelEvents, HintModelEvents } from '../events/ModelEvents';
 import { GameState } from '../models/GameModel';
 import { getViewByProperty, makeSprite } from '../utils';
+import { BoardState } from '../models/BoardModel';
 
 export class HintView extends Container {
     private hand: Sprite;
     private hintPositions: Point[] = [];
     private currentPoint = 0;
-    private isTyping = false;
+    private boardState: BoardState;
 
     constructor() {
         super();
 
         lego.event
             .on(HintModelEvents.VisibleUpdate, this.onHintVisibleUpdate, this)
-            .on(GameModelEvents.StateUpdate, this.onGameStateUpdate, this);
+            .on(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
+            
 
         this.build();
         this.hide();
@@ -30,16 +32,19 @@ export class HintView extends Container {
     public destroy(): void {
         this.removeTweens();
         lego.event.off(HintModelEvents.VisibleUpdate, this.onHintVisibleUpdate, this);
-        lego.event.off(GameModelEvents.StateUpdate, this.onGameStateUpdate, this);
+        lego.event.off(BoardModelEvents.StateUpdate, this.onBoardStateUpdate, this);
+
 
         super.destroy();
     }
 
-    private onGameStateUpdate(state: GameState): void {
-        this.isTyping = state === GameState.Typing;
+    private onBoardStateUpdate(state: BoardState): void {
+        this.boardState = state;
     }
 
     private onHintVisibleUpdate(visible: boolean): void {
+        console.warn('hint visible ', visible);
+        
         visible ? this.show() : this.hide();
     }
 
@@ -52,6 +57,8 @@ export class HintView extends Container {
     private show(): void {
         this.removeTweens();
         this.hintPositions = this.getHintPosition();
+        console.warn(this.hintPositions);
+        
         this.currentPoint = 0;
 
         this.showFirstTime();
@@ -63,7 +70,7 @@ export class HintView extends Container {
     }
 
     private showFirstTime(): void {
-        const point = this.hintPositions[this.currentPoint];
+        const point = this.hintPositions[this.currentPoint];        
         this.hand.scale.set(0.8);
         this.hand.alpha = 1;
         this.hand.position.set(point.x, point.y);
@@ -83,8 +90,11 @@ export class HintView extends Container {
             direction: 'alternate',
             complete: () => {
                 this.currentPoint += 1;
-                this.currentPoint = this.hintPositions.length % this.currentPoint;
+                console.warn(this.hintPositions.length % this.currentPoint, this.hintPositions.length,  this.currentPoint);
+                
+                this.currentPoint = this.currentPoint % this.hintPositions.length;
                 this.moveHand(this.hintPositions[this.currentPoint]);
+
             },
         });
     }
@@ -106,14 +116,19 @@ export class HintView extends Container {
     }
 
     private getHintPosition(): Point[] {
-        return [new Point(0, 0)];
+        switch (this.boardState) {
+            case BoardState.ChooseCategory:
+                return this.getCardHintPositions()
+        
+            default:
+                return [new Point(0, 0)];
+        }
     }
 
     private getCardHintPositions() {
-        const board = getViewByProperty('viewName', 'BoardView');
-        const boardPos = board.getHintPosition();
-        const pos = this.toLocal(boardPos);
-        return [pos];
+        const categoriesWrapper = getViewByProperty('viewName', 'CategoriesWrapper');
+        const cardsPos = categoriesWrapper.getHintPositions();
+        return cardsPos.map(p=>this.toLocal(p));
     }
 
     private getKeyHintPositions() {

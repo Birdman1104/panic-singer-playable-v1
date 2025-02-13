@@ -3,8 +3,8 @@ import { AdStatus } from '../../models/AdModel';
 import { BoardState } from '../../models/BoardModel';
 import { CategoryName } from '../../models/CategoryModel';
 import Head from '../../models/HeadModel';
-import { reachedFinalWaveGuard } from '../Guards';
-import { setAdStatusCommand, setBoardStateCommand, takeToStoreCommand } from './Commands';
+import { hintModelGuard, reachedFinalWaveGuard } from '../Guards';
+import { restartHintCommand, setAdStatusCommand, setBoardStateCommand, takeToStoreCommand } from './Commands';
 
 export const onCategoryClickCommand = (categoryName: CategoryName): void => {
     Head.gameModel?.board?.setChosenCategory(categoryName);
@@ -44,5 +44,14 @@ export const onAnswerShowCompleteCommand = (): void => {
 };
 
 export const onSongTimerCompletedCommand = (completed: boolean): void => {
-    completed && lego.command.payload(BoardState.ShowAnswer).execute(setBoardStateCommand);
+    if(completed) {
+        lego.command
+        .guard(lego.not(reachedFinalWaveGuard))
+        .payload(BoardState.ShowAnswer)
+        .execute(setBoardStateCommand)
+
+        .guard(reachedFinalWaveGuard, hintModelGuard)
+        .payload(0)
+        .execute(restartHintCommand)
+    } 
 };

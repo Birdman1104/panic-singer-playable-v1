@@ -1,5 +1,5 @@
 import { lego } from '@armathai/lego';
-import { Container, Rectangle, Text } from 'pixi.js';
+import { Container, Point, Rectangle, Text } from 'pixi.js';
 import { BoardEvents } from '../events/MainEvents';
 import { CategoryModel, CategoryName } from '../models/CategoryModel';
 import { CATEGORY_HEIGHT, CATEGORY_WIDTH, CategoryItem } from './CategoryItem';
@@ -18,6 +18,10 @@ export class CategoriesWrapper extends Container {
 
     public getBounds(): Rectangle {
         return new Rectangle(0, 0, CATEGORY_WIDTH * 2 + 50, CATEGORY_HEIGHT * 2 + 150);
+    }
+
+    public getHintPositions(): Point[] {
+        return this.categories.map((c) => this.toGlobal(c.position));
     }
 
     private build(): void {

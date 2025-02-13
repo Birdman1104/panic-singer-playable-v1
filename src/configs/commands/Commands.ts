@@ -6,6 +6,7 @@ import Head from '../../models/HeadModel';
 import { HintState } from '../../models/HintModel';
 import { unMapCommands } from '../EventCommandPairs';
 import { ctaModelGuard, gameModelGuard, hintModelGuard, hintParamGuard, soundParamGuard } from '../Guards';
+import { GAME_CONFIG } from '../GameConfig';
 
 export const initAdModelCommand = (): void => Head.initializeADModel();
 
@@ -128,9 +129,12 @@ export const onGameStateUpdateCommand = (state: GameState): void => {
 };
 
 export const onBoardStateUpdateCommand = (state: BoardState): void => {
+    lego.command.execute(hideHintCommand)
+    
     switch (state) {
         case BoardState.ChooseCategory:
             Head.gameModel?.board?.initializeCategories();
+            lego.command.execute(restartHintCommand)
             break;
         case BoardState.Countdown:
             Head.gameModel?.board?.setCategorySongs();
@@ -152,6 +156,20 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
             break;
     }
 };
+
+export const restartHintCommand = (delay = GAME_CONFIG.HintOnIdle): void =>  {
+    lego.command
+        //
+        .guard(hintModelGuard)
+        .execute(hideHintCommand)
+
+        .guard(hintModelGuard)
+        .execute(stopHintVisibilityTimerCommand)
+
+        .guard(hintModelGuard)
+        .payload(delay)
+        .execute(startHintVisibilityTimerCommand);
+}
 
 export const resizeCommand = (): void => {
     lego.command
