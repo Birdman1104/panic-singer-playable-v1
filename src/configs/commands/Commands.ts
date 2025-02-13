@@ -129,12 +129,15 @@ export const onGameStateUpdateCommand = (state: GameState): void => {
 };
 
 export const onBoardStateUpdateCommand = (state: BoardState): void => {
-    lego.command.execute(hideHintCommand)
-    
+    lego.command.execute(hideHintCommand);
+
     switch (state) {
         case BoardState.ChooseCategory:
             Head.gameModel?.board?.initializeCategories();
-            lego.command.execute(restartHintCommand)
+            lego.command.execute(restartHintCommand);
+            break;
+        case BoardState.ChooseSettings:
+            lego.command.execute(restartHintCommand);
             break;
         case BoardState.Countdown:
             Head.gameModel?.board?.setCategorySongs();
@@ -143,6 +146,7 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
             // TODO - check if the game ends
             Head.gameModel?.board?.startNextWave();
             Head.gameModel?.board?.startCountdown();
+            lego.command.payload(1).execute(restartHintCommand);
             break;
         case BoardState.ShowAnswer:
             Head.gameModel?.board?.stopWaveTimer();
@@ -157,7 +161,7 @@ export const onBoardStateUpdateCommand = (state: BoardState): void => {
     }
 };
 
-export const restartHintCommand = (delay = GAME_CONFIG.HintOnIdle): void =>  {
+export const restartHintCommand = (delay = GAME_CONFIG.HintOnIdle): void => {
     lego.command
         //
         .guard(hintModelGuard)
@@ -169,7 +173,7 @@ export const restartHintCommand = (delay = GAME_CONFIG.HintOnIdle): void =>  {
         .guard(hintModelGuard)
         .payload(delay)
         .execute(startHintVisibilityTimerCommand);
-}
+};
 
 export const resizeCommand = (): void => {
     lego.command

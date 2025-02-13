@@ -1,6 +1,6 @@
 import { lego } from '@armathai/lego';
 import anime from 'animejs';
-import { Container, Rectangle, Sprite, Text } from 'pixi.js';
+import { Container, Point, Rectangle, Sprite, Text } from 'pixi.js';
 import { Images } from '../assets';
 import { DEFAULT_FONT } from '../configs/GameConfig';
 import { ChooseSettingsEvents } from '../events/MainEvents';
@@ -21,8 +21,16 @@ export class ChooseSettings extends Container {
         // drawBounds(this, 0xff0000);
     }
 
+    get viewName() {
+        return 'ChooseSettings';
+    }
+
     public getBounds(): Rectangle {
         return new Rectangle(-300, -450, 600, 900);
+    }
+
+    public getHintPositions(): Point[] {
+        return [this.toGlobal(this.startButton.position)];
     }
 
     public hide(): void {

@@ -23,6 +23,7 @@ export class WaveTimer extends Container {
         anime({
             targets: this.progressBar,
             width: W,
+            alpha: 1,
             duration: 50,
             easing: 'linear',
             complete: () => {
@@ -39,6 +40,8 @@ export class WaveTimer extends Container {
             duration: SONG_PLAY_DURATION * 1000,
             easing: 'linear',
             complete: () => {
+                this.progressBar.alpha = 0;
+
                 this.progressBar.width = 0;
             },
         });
@@ -46,7 +49,6 @@ export class WaveTimer extends Container {
 
     public stopTimer(): void {
         anime.remove(this.progressBar);
-        // this.resetProgress();
     }
 
     private build(): void {

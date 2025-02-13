@@ -1,5 +1,5 @@
 import { lego } from '@armathai/lego';
-import { Container, Rectangle } from 'pixi.js';
+import { Container, Point, Rectangle } from 'pixi.js';
 import { WaveEvents } from '../events/MainEvents';
 import { CategoryModelEvents } from '../events/ModelEvents';
 import { ChoiceModel } from '../models/ChoiceModel';
@@ -25,6 +25,10 @@ export class Wave extends Container {
         // drawBounds(this);
     }
 
+    get viewName() {
+        return 'Wave';
+    }
+
     public destroy(): void {
         lego.event
             .off(CategoryModelEvents.PlayingTimeUpdate, this.onPlayingTimeUpdate, this)
@@ -35,6 +39,14 @@ export class Wave extends Container {
 
     public getBounds(): Rectangle {
         return new Rectangle(0, 0, CW, 950);
+    }
+
+    public getHintPositions(): Point[] {
+        return this.choices.map(c=> {
+            const x = c.x + c.width / 1.25;
+            const y = c.y + c.height / 2;
+            return this.toGlobal(new Point(x,y))
+        })
     }
 
     public updateWave(waveData: ChoiceModel[]): void {

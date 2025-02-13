@@ -2,7 +2,7 @@ import anime from 'animejs';
 import { Container, Rectangle, Text } from 'pixi.js';
 import { delayRunnable } from '../utils';
 
-const DURATION = 1;
+const DURATION = 3;
 
 export class Countdown extends Container {
     private text: Text;

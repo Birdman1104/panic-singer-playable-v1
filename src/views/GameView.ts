@@ -82,8 +82,6 @@ export class GameView extends PixiGrid {
     }
 
     private onBoardStateUpdate(state: BoardState): void {
-        console.warn(state);
-
         switch (state) {
             case BoardState.ChooseCategory:
                 this.buildChooseCategory();

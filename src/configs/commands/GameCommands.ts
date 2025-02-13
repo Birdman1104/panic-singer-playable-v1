@@ -44,14 +44,10 @@ export const onAnswerShowCompleteCommand = (): void => {
 };
 
 export const onSongTimerCompletedCommand = (completed: boolean): void => {
-    if(completed) {
+    if (completed) {
         lego.command
-        .guard(lego.not(reachedFinalWaveGuard))
-        .payload(BoardState.ShowAnswer)
-        .execute(setBoardStateCommand)
-
-        .guard(reachedFinalWaveGuard, hintModelGuard)
-        .payload(0)
-        .execute(restartHintCommand)
-    } 
+            .guard(lego.not(reachedFinalWaveGuard))
+            .payload(BoardState.ShowAnswer)
+            .execute(setBoardStateCommand);
+    }
 };

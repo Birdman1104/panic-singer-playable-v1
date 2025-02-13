@@ -21,7 +21,11 @@ export class CategoriesWrapper extends Container {
     }
 
     public getHintPositions(): Point[] {
-        return this.categories.map((c) => this.toGlobal(c.position));
+        return this.categories.map((c) => {
+            const x = c.x + c.width / 4;
+            const y = c.y + c.height / 4;
+            return this.toGlobal(new Point(x, y));
+        });
     }
 
     private build(): void {
